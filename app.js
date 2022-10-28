@@ -4,6 +4,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
+const errorHandlerMiddleware = require('./app/middlewares/error-handler');
+const notFoundMiddleware = require('./app/middlewares/not-found');
+
 const app = express();
 
 app.use(cors());
@@ -18,5 +21,8 @@ app.get('/', (req, res) => {
     message: 'Welcome to Matsuri API!',
   });
 });
+
+app.use(errorHandlerMiddleware);
+app.use(notFoundMiddleware);
 
 module.exports = app;
