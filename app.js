@@ -5,14 +5,14 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const authRouter = require('./app/api/v1/auth/router');
+const organizersRouter = require('./app/api/v1/organizers/router');
+const refreshTokenRouter = require('./app/api/v1/refresh-token/router');
+const usersRouter = require('./app/api/v1/users/router');
 
 const errorHandlerMiddleware = require('./app/middlewares/error-handler');
 const notFoundMiddleware = require('./app/middlewares/not-found');
 
 const BASE_URL_V1 = '/api/v1';
-
-const errorHandlerMiddleware = require('./app/middlewares/error-handler');
-const notFoundMiddleware = require('./app/middlewares/not-found');
 
 const app = express();
 
@@ -30,6 +30,9 @@ app.get('/', (req, res) => {
 });
 
 app.use(`${BASE_URL_V1}/cms/auth`, authRouter);
+app.use(`${BASE_URL_V1}/cms/organizers`, organizersRouter);
+app.use(`${BASE_URL_V1}/cms/refresh-token`, refreshTokenRouter);
+app.use(`${BASE_URL_V1}/cms/users`, usersRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
