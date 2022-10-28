@@ -1,5 +1,5 @@
 const Users = require('../../api/v1/users/model');
-const { createUserRefreshToken } = require('./refreshToken');
+const { createUserRefreshToken } = require('./refresh-token');
 const { BadRequestError, UnauthorizedError } = require('../../errors');
 const {
   createUserPayload,
@@ -29,9 +29,9 @@ const handleSignIn = async (req) => {
   const token = generateToken(createUserPayload(result));
   const refreshToken = generateRefreshToken(createUserPayload(result));
 
-  await createUserRefreshToken({ refreshToken, user: result._id });
+  await createUserRefreshToken({ refreshToken, userId: result._id });
 
-  return { token, refreshToken, role: result.role, email: result.email };
+  return { token, refreshToken, email: result.email, role: result.role };
 };
 
 module.exports = { handleSignIn };
