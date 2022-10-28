@@ -11,6 +11,9 @@ const notFoundMiddleware = require('./app/middlewares/not-found');
 
 const BASE_URL_V1 = '/api/v1';
 
+const errorHandlerMiddleware = require('./app/middlewares/error-handler');
+const notFoundMiddleware = require('./app/middlewares/not-found');
+
 const app = express();
 
 app.use(cors());
