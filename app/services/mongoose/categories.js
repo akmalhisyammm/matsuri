@@ -2,18 +2,18 @@ const Categories = require('../../api/v1/categories/model');
 const { BadRequestError, NotFoundError } = require('../../errors');
 
 const getAllCategories = async (req) => {
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
-  const result = await Categories.find({ organizerId });
+  const result = await Categories.find({ organizer });
 
   return result;
 };
 
 const getCategoryById = async (req) => {
   const { id } = req.params;
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
-  const result = await Categories.findOne({ _id: id, organizerId });
+  const result = await Categories.findOne({ _id: id, organizer });
 
   if (!result) {
     throw new NotFoundError(`No categories found with id ${id}.`);
@@ -24,15 +24,15 @@ const getCategoryById = async (req) => {
 
 const createCategory = async (req) => {
   const { name } = req.body;
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
-  const check = await Categories.findOne({ name, organizerId });
+  const check = await Categories.findOne({ name, organizer });
 
   if (check) {
     throw new BadRequestError('Category name already exist.');
   }
 
-  const result = await Categories.create({ name, organizerId });
+  const result = await Categories.create({ name, organizer });
 
   return result;
 };
@@ -40,13 +40,9 @@ const createCategory = async (req) => {
 const updateCategory = async (req) => {
   const { id } = req.params;
   const { name } = req.body;
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
-  const check = await Categories.findOne({
-    _id: { $ne: id },
-    name,
-    organizerId,
-  });
+  const check = await Categories.findOne({ _id: { $ne: id }, name, organizer });
 
   if (check) {
     throw new BadRequestError('Category name already exist.');
@@ -67,9 +63,9 @@ const updateCategory = async (req) => {
 
 const deleteCategory = async (req) => {
   const { id } = req.params;
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
-  const result = await Categories.findOneAndRemove({ _id: id, organizerId });
+  const result = await Categories.findOneAndRemove({ _id: id, organizer });
 
   if (!result) {
     throw new NotFoundError(`No categories found with id ${id}.`);

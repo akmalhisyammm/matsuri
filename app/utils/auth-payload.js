@@ -4,7 +4,7 @@ const createUserPayload = (user) => {
     name: user.name,
     email: user.email,
     role: user.role,
-    organizerId: user.organizerId,
+    organizer: user.organizer,
   };
 };
 

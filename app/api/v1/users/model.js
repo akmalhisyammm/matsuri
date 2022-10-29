@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       enum: ['admin', 'organizer', 'owner'],
       default: 'admin',
     },
-    organizerId: {
+    organizer: {
       type: mongoose.Types.ObjectId,
       ref: 'Organizer',
       required: true,

@@ -8,7 +8,7 @@ const categorySchema = new mongoose.Schema(
       maxLength: [20, 'Category name must be at most 20 characters long.'],
       required: [true, 'Category name is required.'],
     },
-    organizerId: {
+    organizer: {
       type: mongoose.Types.ObjectId,
       ref: 'Organizer',
       required: true,

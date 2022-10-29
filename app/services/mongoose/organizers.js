@@ -17,7 +17,7 @@ const createOrganizer = async (req) => {
     email,
     password,
     role,
-    organizerId: result._id,
+    organizer: result._id,
   });
 
   delete user._doc.password;

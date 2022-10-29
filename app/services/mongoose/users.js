@@ -9,19 +9,13 @@ const getAllUsers = async () => {
 
 const createUser = async (req) => {
   const { name, email, password, confirmPassword, role } = req.body;
-  const { organizerId } = req.user;
+  const { organizer } = req.user;
 
   if (password !== confirmPassword) {
     throw new BadRequestError('Password and confirm password do not match.');
   }
 
-  const result = await Users.create({
-    name,
-    email,
-    password,
-    role,
-    organizerId,
-  });
+  const result = await Users.create({ name, email, password, role, organizer });
 
   return result;
 };
