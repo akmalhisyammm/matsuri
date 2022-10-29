@@ -2,7 +2,7 @@ const Organizers = require('../../api/v1/organizers/model');
 const Users = require('../../api/v1/users/model');
 const { BadRequestError } = require('../../errors');
 
-const createOrganizer = async (req) => {
+const createOrganizerAndUser = async (req) => {
   const { name, email, password, confirmPassword, role, organizerName } =
     req.body;
 
@@ -10,7 +10,7 @@ const createOrganizer = async (req) => {
     throw new BadRequestError('Password and confirm password do not match.');
   }
 
-  const result = await Organizers.create({ organizerName });
+  const result = await Organizers.create({ name: organizerName });
 
   const user = await Users.create({
     name,
@@ -25,4 +25,4 @@ const createOrganizer = async (req) => {
   return user;
 };
 
-module.exports = { createOrganizer };
+module.exports = { createOrganizerAndUser };
