@@ -9,6 +9,16 @@ const getAllCategories = async (req) => {
   return result;
 };
 
+const getCategoryById = async (id) => {
+  const result = await Categories.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError(`No categories found with id ${id}.`);
+  }
+
+  return result;
+};
+
 const getCategoryByIdAndOrganizer = async (req) => {
   const { id } = req.params;
   const { organizer } = req.user;
@@ -76,6 +86,7 @@ const deleteCategory = async (req) => {
 
 module.exports = {
   getAllCategories,
+  getCategoryById,
   getCategoryByIdAndOrganizer,
   createCategory,
   updateCategory,
