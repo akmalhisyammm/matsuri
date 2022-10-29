@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const {
   getAllCategories,
-  getCategoryById,
+  getCategoryByIdAndOrganizer,
   createCategory,
   updateCategory,
   deleteCategory,
@@ -19,7 +19,7 @@ const index = async (req, res, next) => {
 
 const find = async (req, res, next) => {
   try {
-    const result = await getCategoryById(req);
+    const result = await getCategoryByIdAndOrganizer(req);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {

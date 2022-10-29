@@ -9,7 +9,7 @@ const getAllCategories = async (req) => {
   return result;
 };
 
-const getCategoryById = async (req) => {
+const getCategoryByIdAndOrganizer = async (req) => {
   const { id } = req.params;
   const { organizer } = req.user;
 
@@ -76,7 +76,7 @@ const deleteCategory = async (req) => {
 
 module.exports = {
   getAllCategories,
-  getCategoryById,
+  getCategoryByIdAndOrganizer,
   createCategory,
   updateCategory,
   deleteCategory,
