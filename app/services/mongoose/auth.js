@@ -29,7 +29,7 @@ const handleSignIn = async (req) => {
   const token = generateToken(createUserPayload(result));
   const refreshToken = generateRefreshToken(createUserPayload(result));
 
-  await createUserRefreshToken({ refreshToken, userId: result._id });
+  await createUserRefreshToken({ refreshToken, user: result._id });
 
   return { token, refreshToken, email: result.email, role: result.role };
 };
