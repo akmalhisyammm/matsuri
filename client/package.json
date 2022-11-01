@@ -1,12 +1,18 @@
 {
   "name": "matsuri-client",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Matsuri client app",
+  "author": "Muhammad Akmal Hisyam",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "type:check": "tsc --noEmit"
   },
   "dependencies": {
     "@types/node": "18.11.9",
@@ -16,5 +22,21 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "4.8.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "prettier": "^2.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akmalhisyammm/matsuri"
+  },
+  "bugs": {
+    "url": "https://github.com/akmalhisyammm/matsuri/issues"
   }
 }
