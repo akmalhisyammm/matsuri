@@ -10,7 +10,7 @@ const router = express.Router();
 router.get(
   '/',
   authenticateUser,
-  authorizeRoles('organizer', 'admin', 'owner'),
+  authorizeRoles('Organizer', 'Admin', 'Owner'),
   index
 );
 

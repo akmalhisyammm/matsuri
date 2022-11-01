@@ -7,7 +7,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', authenticateUser, authorizeRoles('owner'), index);
-router.post('/', authenticateUser, authorizeRoles('organizer'), create);
+router.get('/', authenticateUser, authorizeRoles('Owner'), index);
+router.post('/', authenticateUser, authorizeRoles('Organizer'), create);
 
 module.exports = router;

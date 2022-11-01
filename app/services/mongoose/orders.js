@@ -6,7 +6,7 @@ const getAllOrders = async (req) => {
 
   let conditions = {};
 
-  if (role !== 'owner') {
+  if (role !== 'Owner') {
     conditions = { ...conditions, 'eventHistory.organizer': organizer };
   }
 

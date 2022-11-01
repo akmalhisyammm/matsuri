@@ -7,6 +7,6 @@ const {
 
 const router = express.Router();
 
-router.post('/', authenticateUser, authorizeRoles('owner'), create);
+router.post('/', authenticateUser, authorizeRoles('Owner'), create);
 
 module.exports = router;

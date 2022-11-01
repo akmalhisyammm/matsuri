@@ -148,13 +148,13 @@ const checkoutOrder = async (req) => {
 
   await tickets.forEach((ticket) => {
     event.tickets.forEach((eventTicket) => {
-      if (ticket.ticketCategories.type === eventTicket.type) {
+      if (ticket.ticketCategory.type === eventTicket.type) {
         if (ticket.totalTicket > eventTicket.stock) {
           throw new NotFoundError('Ticket stock is not enough.');
         } else {
           eventTicket.stock -= ticket.totalTicket;
           totalOrderTicket += ticket.totalTicket;
-          totalPay += ticket.ticketCategories.price * ticket.totalTicket;
+          totalPay += ticket.ticketCategory.price * ticket.totalTicket;
         }
       }
     });

@@ -7,11 +7,11 @@ const {
 
 const router = express.Router();
 
-router.get('/', authenticateUser, authorizeRoles('organizer'), index);
-router.post('/', authenticateUser, authorizeRoles('organizer'), create);
+router.get('/', authenticateUser, authorizeRoles('Organizer'), index);
+router.post('/', authenticateUser, authorizeRoles('Organizer'), create);
 
-router.get('/:id', authenticateUser, authorizeRoles('organizer'), find);
-router.put('/:id', authenticateUser, authorizeRoles('organizer'), update);
-router.delete('/:id', authenticateUser, authorizeRoles('organizer'), destroy);
+router.get('/:id', authenticateUser, authorizeRoles('Organizer'), find);
+router.put('/:id', authenticateUser, authorizeRoles('Organizer'), update);
+router.delete('/:id', authenticateUser, authorizeRoles('Organizer'), destroy);
 
 module.exports = router;
