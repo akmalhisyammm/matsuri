@@ -1,10 +1,16 @@
 {
   "name": "matsuri-server",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Matsuri server app",
+  "author": "Muhammad Akmal Hisyam",
+  "license": "MIT",
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,6 +28,17 @@
     "nodemailer": "^6.8.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akmalhisyammm/matsuri"
+  },
+  "bugs": {
+    "url": "https://github.com/akmalhisyammm/matsuri/issues"
   }
 }

@@ -3,8 +3,7 @@ const Users = require('../../api/v1/users/model');
 const { BadRequestError } = require('../../errors');
 
 const createOrganizerAndUser = async (req) => {
-  const { name, email, password, confirmPassword, role, organizerName } =
-    req.body;
+  const { name, email, password, confirmPassword, role, organizerName } = req.body;
 
   if (password !== confirmPassword) {
     throw new BadRequestError('Password and confirm password do not match.');

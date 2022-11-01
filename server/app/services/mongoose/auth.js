@@ -1,11 +1,7 @@
 const Users = require('../../api/v1/users/model');
 const { createUserRefreshToken } = require('./refresh-token');
 const { BadRequestError, UnauthorizedError } = require('../../errors');
-const {
-  createUserPayload,
-  generateToken,
-  generateRefreshToken,
-} = require('../../utils');
+const { createUserPayload, generateToken, generateRefreshToken } = require('../../utils');
 
 const handleSignIn = async (req) => {
   const { email, password } = req.body;
