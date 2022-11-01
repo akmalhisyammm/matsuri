@@ -1,0 +1,50 @@
+[
+  {
+    "_id": {
+      "$oid": "623eb95b15919466fa3b53b2"
+    },
+    "type": "BCA",
+    "status": true,
+    "image": {
+      "$oid": "62cfea14e8fed983d5c67a3d"
+    },
+    "organizer": {
+      "$oid": "62cfe35e8ad11e7a5e240f26"
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1648277851628"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1650808917752"
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "623eb96515919466fa3b53b4"
+    },
+    "type": "BNI",
+    "status": true,
+    "image": {
+      "$oid": "62cfea14e8fed983d5c2tgf9"
+    },
+    "organizer": {
+      "$oid": "62cfe3728ad11e7a5e240f2a"
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1648277861318"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1650808941357"
+      }
+    },
+    "__v": 0
+  }
+]
