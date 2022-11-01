@@ -47,8 +47,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'paid'],
-      default: 'pending',
+      enum: ['Pending', 'Paid'],
+      default: 'Pending',
     },
     totalPay: {
       type: Number,
@@ -77,9 +77,9 @@ const orderSchema = new mongoose.Schema(
     eventHistory: {
       title: {
         type: String,
-        required: [true, 'Event title is required.'],
         minLength: 3,
         maxLength: 50,
+        required: [true, 'Event title is required.'],
       },
       date: {
         type: Date,
