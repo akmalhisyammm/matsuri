@@ -1,0 +1,71 @@
+[
+  {
+    "_id": {
+      "$oid": "62cfe35e8ad11e7a5e240f28"
+    },
+    "name": "Naruto Uzumaki",
+    "email": "naruto.uzumaki@gmail.com",
+    "password": "$2a$12$zrZxlTTc4mj1nU688UWEse5C6rKeufSgB1xJWm59KJIpbgWoFPtLm",
+    "role": "Owner",
+    "organizer": {
+      "$oid": "62cfe35e8ad11e7a5e240f26"
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1657791326139"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1657791326139"
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "62cfe3728ad11e7a5e240f2c"
+    },
+    "name": "Gaara",
+    "email": "gaara@gmail.com",
+    "password": "$2a$12$pngIlpVXexqEJ0y7sL1a7eETbTRwILrZG19wBdal.CkMTSK7uWWxC",
+    "role": "Organizer",
+    "organizer": {
+      "$oid": "62cfe3728ad11e7a5e240f2a"
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1657791346465"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1657791346465"
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "62cfe3959d69d38ccae39a86"
+    },
+    "name": "Sakura Haruno",
+    "email": "sakura.haruno@gmail.com",
+    "password": "$2a$12$XvVhwCpzB4/XWcWjMH1EVOwcxINRLLDohsySqCPDF/eTs62EqrTsy",
+    "role": "Admin",
+    "organizer": {
+      "$oid": "62cfe35e8ad11e7a5e240f26"
+    },
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1657791381263"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1657791381263"
+      }
+    },
+    "__v": 0
+  }
+]
