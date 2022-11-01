@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 const {
   jwtSecret,
   jwtExpiration,
-  jwtRefreshTokenSecret,
-  jwtRefreshTokenExpiration,
+  jwtRefreshSecret,
+  jwtRefreshExpiration,
 } = require('../config');
 
 const generateToken = (payload) => {
@@ -12,8 +12,8 @@ const generateToken = (payload) => {
   return token;
 };
 const generateRefreshToken = (payload) => {
-  const token = jwt.sign(payload, jwtRefreshTokenSecret, {
-    expiresIn: jwtRefreshTokenExpiration,
+  const token = jwt.sign(payload, jwtRefreshSecret, {
+    expiresIn: jwtRefreshExpiration,
   });
 
   return token;
@@ -26,7 +26,7 @@ const decodeToken = (token) => {
 };
 
 const decodeRefreshToken = (token) => {
-  const payload = jwt.verify(token, jwtRefreshTokenSecret);
+  const payload = jwt.verify(token, jwtRefreshSecret);
 
   return payload;
 };
