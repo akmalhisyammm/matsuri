@@ -1,5 +1,5 @@
 {
-  "name": "matsuri-api",
+  "name": "matsuri-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
