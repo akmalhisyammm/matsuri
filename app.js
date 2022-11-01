@@ -11,6 +11,7 @@ const imagesRouter = require('./app/api/v1/images/router');
 const ordersRouter = require('./app/api/v1/orders/router');
 const organizersRouter = require('./app/api/v1/organizers/router');
 const paymentsRouter = require('./app/api/v1/payments/router');
+const participantsRouter = require('./app/api/v1/participants/router');
 const refreshTokenRouter = require('./app/api/v1/refresh-token/router');
 const talentsRouter = require('./app/api/v1/talents/router');
 const usersRouter = require('./app/api/v1/users/router');
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use(BASE_URL_V1, participantsRouter);
 app.use(`${BASE_URL_V1}/cms/auth`, authRouter);
 app.use(`${BASE_URL_V1}/cms/categories`, categoriesRouter);
 app.use(`${BASE_URL_V1}/cms/events`, eventsRouter);
