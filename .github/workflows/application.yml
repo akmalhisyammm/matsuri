@@ -1,0 +1,66 @@
+name: Application CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  client:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: ./client/yarn.lock
+
+      - name: Install all client dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Format check client app
+        run: yarn format:check
+
+      - name: Lint client app
+        run: yarn lint
+
+      - name: Type check client app
+        run: yarn type:check
+
+      - name: Build client app
+        run: yarn build
+
+  server:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: ./server/yarn.lock
+
+      - name: Install all server dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Format check server app
+        run: yarn format:check
+
+      - name: Lint server app
+        run: yarn lint
