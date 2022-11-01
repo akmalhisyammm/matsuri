@@ -16,7 +16,7 @@ const refreshTokenRouter = require('./app/api/v1/refresh-token/router');
 const talentsRouter = require('./app/api/v1/talents/router');
 const usersRouter = require('./app/api/v1/users/router');
 
-const errorHandlerMiddleware = require('./app/middlewares/error-handler');
+const errorMiddleware = require('./app/middlewares/error');
 const notFoundMiddleware = require('./app/middlewares/not-found');
 
 const BASE_URL_V1 = '/api/v1';
@@ -48,7 +48,7 @@ app.use(`${BASE_URL_V1}/cms/refresh-token`, refreshTokenRouter);
 app.use(`${BASE_URL_V1}/cms/talents`, talentsRouter);
 app.use(`${BASE_URL_V1}/cms/users`, usersRouter);
 
-app.use(errorHandlerMiddleware);
+app.use(errorMiddleware);
 app.use(notFoundMiddleware);
 
 module.exports = app;

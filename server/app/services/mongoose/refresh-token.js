@@ -1,11 +1,7 @@
 const RefreshToken = require('../../api/v1/refresh-token/model');
 const Users = require('../../api/v1/users/model');
 const { NotFoundError } = require('../../errors');
-const {
-  createUserPayload,
-  decodeRefreshToken,
-  generateToken,
-} = require('../../utils');
+const { createUserPayload, decodeRefreshToken, generateToken } = require('../../utils');
 
 const getUserRefreshToken = async (req) => {
   const { refreshToken } = req.params;
