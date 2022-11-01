@@ -1,4 +1,3 @@
-// import model Events
 const Events = require('../../api/v1/events/model');
 const { getCategoryById } = require('./categories');
 const { getImageById } = require('./images');
