@@ -15,9 +15,11 @@
     "type:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource/poppins": "^4.5.10",
     "@types/node": "18.11.9",
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
+    "bootstrap": "^5.2.2",
     "next": "13.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
