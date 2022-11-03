@@ -3,7 +3,7 @@
     "_id": {
       "$oid": "62cfe6e9d8940572a095e58b"
     },
-    "url": "https://milenianews.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-02-at-16.52.38.jpeg",
+    "url": "uploads/58694395-event-sample-1.jpeg",
     "createdAt": {
       "$date": {
         "$numberLong": "1657792233832"
@@ -20,7 +20,7 @@
     "_id": {
       "$oid": "62cfea14e8fed983d5c3a4e7"
     },
-    "url": "https://s3-ap-southeast-1.amazonaws.com/loket-production-sg/images/banner/20190919135938_5d83275a942eb.jpg",
+    "url": "uploads/50238501-event-sample-2.jpg",
     "createdAt": {
       "$date": {
         "$numberLong": "1657792233832"
@@ -37,7 +37,7 @@
     "_id": {
       "$oid": "62cfea14e8fed983d5c67a3d"
     },
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png",
+    "url": "uploads/20583059-bca.png",
     "createdAt": {
       "$date": {
         "$numberLong": "1657793044829"
@@ -52,9 +52,9 @@
   },
   {
     "_id": {
-      "$oid": "62cfea14e8fed983d5c2tgf9"
+      "$oid": "636338e7afe7e2865522f60b"
     },
-    "url": "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png",
+    "url": "uploads/30458309-bni.png",
     "createdAt": {
       "$date": {
         "$numberLong": "1657793044829"

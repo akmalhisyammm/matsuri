@@ -13,8 +13,8 @@ const { authenticateParticipant } = require('../../../middlewares/auth');
 
 const router = express.Router();
 
-router.get('/', index);
-router.get('/:id', detail);
+router.get('/events', index);
+router.get('/events/:id', detail);
 
 router.post('/auth/sign-up', signUp);
 router.post('/auth/sign-in', signIn);

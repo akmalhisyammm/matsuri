@@ -1,3 +1,4 @@
+const Organizers = require('../../api/v1/organizers/model');
 const Users = require('../../api/v1/users/model');
 const { BadRequestError } = require('../../errors');
 
@@ -7,7 +8,29 @@ const getAllUsers = async () => {
   return result;
 };
 
-const createUser = async (req) => {
+const createOrganizerUser = async (req) => {
+  const { name, email, password, confirmPassword, role, organizerName } = req.body;
+
+  if (password !== confirmPassword) {
+    throw new BadRequestError('Password and confirm password do not match.');
+  }
+
+  const result = await Organizers.create({ name: organizerName });
+
+  const user = await Users.create({
+    name,
+    email,
+    password,
+    role,
+    organizer: result._id,
+  });
+
+  delete user._doc.password;
+
+  return user;
+};
+
+const createAdminUser = async (req) => {
   const { name, email, password, confirmPassword, role } = req.body;
   const { organizer } = req.user;
 
@@ -20,4 +43,4 @@ const createUser = async (req) => {
   return result;
 };
 
-module.exports = { getAllUsers, createUser };
+module.exports = { getAllUsers, createOrganizerUser, createAdminUser };

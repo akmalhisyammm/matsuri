@@ -36,7 +36,7 @@
       "$oid": "62cfeacaa7c00d1978e1530f"
     },
     "eventHistory": {
-      "title": "UI & UX",
+      "title": "UI/UX Masterclass",
       "date": {
         "$date": {
           "$numberLong": "1657070174000"
@@ -130,7 +130,7 @@
       "$oid": "62cfeacaa7c00d1978e1530f"
     },
     "eventHistory": {
-      "title": "UI & UX",
+      "title": "UI/UX Masterclass",
       "date": {
         "$date": {
           "$numberLong": "1657070174000"
