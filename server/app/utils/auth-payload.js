@@ -14,6 +14,7 @@ const createParticipantPayload = (participant) => {
     firstName: participant.firstName,
     lastName: participant.lastName,
     email: participant.email,
+    role: participant.role,
   };
 };
 
