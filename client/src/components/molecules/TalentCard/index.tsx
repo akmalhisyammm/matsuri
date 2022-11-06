@@ -1,28 +1,29 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { CustomButton } from 'components/atoms';
+
+import type { IEventTicket } from 'types/event';
 
 type TalentCardProps = {
   name: string;
   occupation: string;
-  price: string;
+  tickets: IEventTicket[];
   imageUrl: string;
   location: string;
   time: string;
   date: string;
+  onSubmit: (ticketId: string) => void;
 };
 
 const TalentCard = ({
   name,
   occupation,
-  price,
+  tickets,
   imageUrl,
   location,
   time,
   date,
+  onSubmit,
 }: TalentCardProps) => {
-  const router = useRouter();
-
   return (
     <div className="d-flex flex-column card-event">
       <h6>Talent</h6>
@@ -37,24 +38,35 @@ const TalentCard = ({
       <hr />
 
       <h6>Get Ticket</h6>
-      <div className="price my-3">
-        ${price}
-        <span>/person</span>
-      </div>
-
-      <div className="d-flex gap-3 align-items-center card-details">
-        <Image src="/icons/ic-marker.svg" alt="semina" width={32} height={32} /> {location}
-      </div>
-      <div className="d-flex gap-3 align-items-center card-details">
-        <Image src="/icons/ic-time.svg" alt="semina" width={32} height={32} /> {time}
-      </div>
-      <div className="d-flex gap-3 align-items-center card-details">
-        <Image src="/icons/ic-calendar.svg" alt="semina" width={32} height={32} /> {date}
-      </div>
-
-      <CustomButton variant="btn-green" action={() => router.push('/checkout')}>
-        Get Ticket
-      </CustomButton>
+      {tickets.map(
+        (ticket: IEventTicket) =>
+          ticket.status && (
+            <div key={ticket._id}>
+              <div className="price my-3">
+                {ticket.price === 0 ? 'Free' : `$${ticket.price}`}
+                <span>/person</span>
+              </div>
+              <div className="d-flex gap-3 align-items-center card-details">
+                <Image src="/icons/ic-marker.svg" alt="semina" width={32} height={32} /> {location}
+              </div>
+              <div className="d-flex gap-3 align-items-center card-details">
+                <Image src="/icons/ic-time.svg" alt="semina" width={32} height={32} /> {time}
+              </div>
+              <div className="d-flex gap-3 align-items-center card-details">
+                <Image src="/icons/ic-calendar.svg" alt="semina" width={32} height={32} /> {date}
+              </div>
+              {ticket.stock ? (
+                <CustomButton variant="btn-navy" action={onSubmit.bind(null, ticket._id)}>
+                  Buy Now
+                </CustomButton>
+              ) : (
+                <CustomButton variant="btn-navy" disabled>
+                  Sold Out
+                </CustomButton>
+              )}
+            </div>
+          )
+      )}
     </div>
   );
 };
