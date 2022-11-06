@@ -1,4 +1,9 @@
+import Skeleton from 'react-loading-skeleton';
+
 import { EventCard } from 'components/molecules';
+import { useEventList } from 'hooks/events';
+
+import type { IEventMain, IEventMainSWR } from 'types/event';
 
 type EventListProps = {
   title: string;
@@ -6,6 +11,8 @@ type EventListProps = {
 };
 
 const EventList = ({ title, subtitle }: EventListProps) => {
+  const { data, isLoading, isError }: IEventMainSWR = useEventList();
+
   return (
     <section className="grow-today">
       <div className="container">
@@ -15,46 +22,26 @@ const EventList = ({ title, subtitle }: EventListProps) => {
         <div className="title">{title}</div>
 
         <div className="mt-5 row gap">
-          <div className="col-lg-3 col-md-6 col-12">
-            <EventCard
-              title="Learn Jira for Sprint Design Venture"
-              subtitle="Product Design"
-              description="Bandung, 22 Jan 2022"
-              price={229}
-              imageUrl="/images/card-1.png"
-              href="/detail/1"
-            />
-          </div>
-          <div className="col-lg-3 col-md-6 col-12">
-            <EventCard
-              title="Team Management for Long Term"
-              subtitle="Product Design"
-              description="Jakarta, 11 Aug 2022"
-              price={0}
-              imageUrl="/images/card-2.png"
-              href="/detail/2"
-            />
-          </div>
-          <div className="col-lg-3 col-md-6 col-12">
-            <EventCard
-              title="Set Marketing Target For SaaS Bii"
-              subtitle="Product Design"
-              description="Bandung, 22 Jan 2022"
-              price={80}
-              imageUrl="/images/card-3.png"
-              href="/detail/3"
-            />
-          </div>
-          <div className="col-lg-3 col-md-6 col-12">
-            <EventCard
-              title="Google Adsense from Zero to Big Bucks"
-              subtitle="Product Design"
-              description="Jakarta, 11 Aug 2022"
-              price={90}
-              imageUrl="/images/card-4.png"
-              href="/detail/4"
-            />
-          </div>
+          {!isError ? (
+            data?.map((event: IEventMain) => (
+              <div className="col-12 col-md-6 col-lg-4" key={event._id}>
+                {!isLoading ? (
+                  <EventCard
+                    title={event.title}
+                    subtitle={event.category.name}
+                    description={event.venueName}
+                    price={event.tickets[0].price}
+                    imageUrl={`${process.env.NEXT_PUBLIC_API_URL}/${event.image.url}`}
+                    href={`/detail/${event._id}`}
+                  />
+                ) : (
+                  <Skeleton width="100%" height={300} borderRadius={20} />
+                )}
+              </div>
+            ))
+          ) : (
+            <p>Failed to fetch event list.</p>
+          )}
         </div>
       </div>
     </section>

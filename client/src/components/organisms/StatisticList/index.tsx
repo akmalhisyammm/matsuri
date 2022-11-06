@@ -1,6 +1,6 @@
 import { StatisticItem } from 'components/molecules';
 
-const Statistics = () => {
+const StatisticList = () => {
   return (
     <section className="statistics container">
       <div className="d-flex flex-row flex-wrap justify-content-center align-items-center gap-5">
@@ -16,4 +16,4 @@ const Statistics = () => {
   );
 };
 
-export default Statistics;
+export default StatisticList;

@@ -1,5 +1,5 @@
+import { EventList, SponsorList, StatisticList, Story } from 'components/organisms';
 import Layout from 'components/layout';
-import { EventList, SponsorList, Statistics, Story } from 'components/organisms';
 
 const Home = () => {
   return (
@@ -7,7 +7,7 @@ const Home = () => {
       <SponsorList theme="light" />
       <EventList title="Featured Events" subtitle="Grow Today" />
       <Story />
-      <Statistics />
+      <StatisticList />
     </Layout>
   );
 };
