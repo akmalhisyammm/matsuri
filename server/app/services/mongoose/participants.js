@@ -192,7 +192,7 @@ const checkoutOrder = async (req) => {
 const getAllPaymentsByOrganizer = async (req) => {
   const { organizer } = req.params;
 
-  const result = await Payments.find({ organizer });
+  const result = await Payments.find({ organizer }).populate('image');
 
   return result;
 };
