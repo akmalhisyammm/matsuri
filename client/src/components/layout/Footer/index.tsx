@@ -1,5 +1,6 @@
-import { CustomLink } from 'components/atoms';
 import Image from 'next/image';
+
+import { CustomLink } from 'components/atoms';
 
 const Footer = () => {
   return (
@@ -11,8 +12,10 @@ const Footer = () => {
 
         <div className="mt-3 d-flex flex-row flex-wrap footer-content align-items-baseline">
           <p className="paragraph">
-            Semina adalah tempat di mana <br className="d-md-block d-none" /> anda dapat mencari
-            event sesuai <br className="d-md-block d-none" /> dengan minat & terdekat.
+            Matsuri is an online ticketing platform and <br className="d-md-block d-none" />
+            event management system that helps you <br className="d-md-block d-none" />
+            to create, promote, and sell tickets for your <br className="d-md-block d-none" />
+            events.
           </p>
 
           <div className="d-flex flex-column footer-links">
@@ -41,7 +44,7 @@ const Footer = () => {
         </div>
 
         <div className="d-flex justify-content-center paragraph all-rights">
-          All Rights Reserved. Semina Angga 2022.
+          All Rights Reserved. Matsuri 2022.
         </div>
       </div>
     </footer>
