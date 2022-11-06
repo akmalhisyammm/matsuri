@@ -1,14 +1,20 @@
+import { useRouter } from 'next/router';
+
+import { BannerDetail, EventDetail, EventList, StatisticList, Story } from 'components/organisms';
 import Layout from 'components/layout';
-import { BannerDetail, EventDetail, EventList, Statistics, Story } from 'components/organisms';
 
 const Detail = () => {
+  const router = useRouter();
+
+  const { id } = router.query;
+
   return (
     <Layout title="Detail">
-      <BannerDetail />
-      <EventDetail />
+      <BannerDetail eventId={id as string} />
+      <EventDetail eventId={id as string} />
       <EventList title="Similar Events" subtitle="Next One" />
       <Story />
-      <Statistics />
+      <StatisticList />
     </Layout>
   );
 };
