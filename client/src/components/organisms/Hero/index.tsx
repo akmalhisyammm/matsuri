@@ -10,8 +10,7 @@ const Hero = () => {
       </div>
 
       <p className="hero-paragraph">
-        Kami menyediakan berbagai acara terbaik untuk membantu <br className="d-none d-lg-block" />
-        anda dalam meningkatkan skills di bidang teknologi
+        We provide the best events to boost your knowledge and experience
       </p>
 
       <CustomLink variant="btn-green" href="#grow-today" scroll={false}>

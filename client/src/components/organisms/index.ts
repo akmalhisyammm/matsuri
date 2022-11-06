@@ -1,3 +1,4 @@
+export { default as ActivateForm } from './ActivateForm';
 export { default as BannerDetail } from './BannerDetail';
 export { default as BannerList } from './BannerList';
 export { default as CheckoutDetail } from './CheckoutDetail';
@@ -5,8 +6,8 @@ export { default as CheckoutForm } from './CheckoutForm';
 export { default as EventDetail } from './EventDetail';
 export { default as EventList } from './EventList';
 export { default as Hero } from './Hero';
-// export { default as NotFound } from './NotFound';
-// export { default as OrderList } from './OrderList';
+export { default as NotFound } from './NotFound';
+export { default as OrderList } from './OrderList';
 export { default as SignInForm } from './SignInForm';
 export { default as SignUpForm } from './SignUpForm';
 export { default as SponsorList } from './SponsorList';
