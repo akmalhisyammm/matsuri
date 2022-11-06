@@ -1,5 +1,6 @@
-import { CustomButton } from 'components/atoms';
 import Image from 'next/image';
+
+import { CustomButton } from 'components/atoms';
 
 const Story = () => {
   return (

@@ -40,7 +40,7 @@ const EventList = ({ title, subtitle }: EventListProps) => {
               </div>
             ))
           ) : (
-            <p>Failed to fetch data.</p>
+            <p>Failed to fetch event list.</p>
           )}
         </div>
       </div>

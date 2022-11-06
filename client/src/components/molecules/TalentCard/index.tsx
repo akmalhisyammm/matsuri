@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import { CustomButton } from 'components/atoms';
 
 import type { IEventTicket } from 'types/event';
@@ -28,7 +29,13 @@ const TalentCard = ({
     <div className="d-flex flex-column card-event">
       <h6>Talent</h6>
       <div className="d-flex align-items-center gap-3 mt-3">
-        <Image src={imageUrl} alt="semina" width={60} height={60} />
+        <Image
+          src={`${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`}
+          alt="semina"
+          width={60}
+          height={60}
+          style={{ objectFit: 'cover', borderRadius: '50%' }}
+        />
         <div>
           <div className="speaker-name">{name}</div>
           <span className="occupation">{occupation}</span>
@@ -38,7 +45,7 @@ const TalentCard = ({
       <hr />
 
       <h6>Get Ticket</h6>
-      {tickets.map(
+      {tickets?.map(
         (ticket: IEventTicket) =>
           ticket.status && (
             <div key={ticket._id}>
@@ -55,15 +62,17 @@ const TalentCard = ({
               <div className="d-flex gap-3 align-items-center card-details">
                 <Image src="/icons/ic-calendar.svg" alt="semina" width={32} height={32} /> {date}
               </div>
-              {ticket.stock ? (
-                <CustomButton variant="btn-navy" action={onSubmit.bind(null, ticket._id)}>
-                  Buy Now
-                </CustomButton>
-              ) : (
-                <CustomButton variant="btn-navy" disabled>
-                  Sold Out
-                </CustomButton>
-              )}
+              <div style={{ width: 300 }}>
+                {ticket.stock ? (
+                  <CustomButton variant="btn-green w-100" action={onSubmit.bind(null, ticket._id)}>
+                    Buy Now
+                  </CustomButton>
+                ) : (
+                  <CustomButton variant="btn-navy w-100 mt-2" disabled>
+                    Sold Out
+                  </CustomButton>
+                )}
+              </div>
             </div>
           )
       )}
