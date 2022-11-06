@@ -1,7 +1,32 @@
+import { useState, useContext } from 'react';
+
 import { CustomButton } from 'components/atoms';
 import { InputGroup } from 'components/molecules';
+import { AuthContext } from 'contexts/auth';
 
 const SignUpForm = () => {
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: '',
+  });
+
+  const authCtx = useContext(AuthContext);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+
+    setForm({ ...form, [id]: value });
+  };
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    authCtx.signUp(form.firstName, form.lastName, form.email, form.password, form.role);
+  };
+
   return (
     <section className="login header bg-navy">
       <div className="container">
@@ -9,44 +34,48 @@ const SignUpForm = () => {
           <div className="col-md-6">
             <div className="hero-headline text-start">
               Expand Your <br className="d-none d-md-block" />
-              Knowledge & Skills
+              Knowledge & Experience
             </div>
             <p className="hero-paragraph text-start">
-              Kami menyediakan berbagai acara terbaik untuk membantu{' '}
-              <br className="d-none d-lg-block" />
-              anda dalam meningkatkan skills di bidang teknologi
+              We provide the best events to boost your knowledge and experience
             </p>
           </div>
 
           <div className="col-md-6">
-            <form action="" className="form-login d-flex flex-column mt-4 mt-md-0">
+            <form
+              className="form-login d-flex flex-column mt-4 mt-md-0"
+              onSubmit={handleFormSubmit}>
               <InputGroup
-                id="first_name"
+                id="firstName"
                 variant="d-flex flex-column align-items-start"
                 label="First Name"
                 type="text"
                 placeholder="Type your first name"
+                onChange={handleInputChange}
               />
               <InputGroup
-                id="last_name"
+                id="lastName"
                 variant="d-flex flex-column align-items-start"
                 label="Last Name"
                 type="text"
                 placeholder="Type your last name"
+                onChange={handleInputChange}
               />
               <InputGroup
-                id="email_address"
+                id="email"
                 variant="d-flex flex-column align-items-start"
                 label="Email"
                 type="email"
                 placeholder="matsuri@example.com"
+                onChange={handleInputChange}
               />
               <InputGroup
                 id="password"
                 variant="d-flex flex-column align-items-start"
-                label="Password (6 characters)"
+                label="Password"
                 type="password"
                 placeholder="Type your password"
+                onChange={handleInputChange}
               />
               <InputGroup
                 id="role"
@@ -54,10 +83,13 @@ const SignUpForm = () => {
                 label="Role"
                 type="text"
                 placeholder="ex: Product Designer"
+                onChange={handleInputChange}
               />
 
               <div className="d-grid mt-2">
-                <CustomButton variant="btn-green">Sign Up</CustomButton>
+                <CustomButton type="submit" variant="btn-green">
+                  Sign Up
+                </CustomButton>
               </div>
             </form>
           </div>
