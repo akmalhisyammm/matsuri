@@ -1,5 +1,5 @@
-import Layout from 'components/layout';
 import { SignUpForm, SponsorList } from 'components/organisms';
+import Layout from 'components/layout';
 
 const SignUp = () => {
   return (

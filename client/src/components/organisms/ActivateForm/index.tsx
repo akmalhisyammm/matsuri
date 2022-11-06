@@ -9,9 +9,7 @@ type ActivateFormProps = {
 };
 
 const ActivateForm = ({ email }: ActivateFormProps) => {
-  const [form, setForm] = useState({
-    otp: '',
-  });
+  const [form, setForm] = useState({ otp: '' });
 
   const authCtx = useContext(AuthContext);
 

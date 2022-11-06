@@ -11,8 +11,8 @@ const SignInForm = () => {
     password: '',
   });
 
-  const authCtx = useContext(AuthContext);
   const router = useRouter();
+  const authCtx = useContext(AuthContext);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -24,7 +24,6 @@ const SignInForm = () => {
     e.preventDefault();
 
     authCtx.signIn(form.email, form.password);
-    router.push('/');
   };
 
   return (
@@ -49,7 +48,7 @@ const SignInForm = () => {
             <InputGroup
               id="password"
               variant="d-flex flex-column align-items-start"
-              label="Password (6 characters)"
+              label="Password"
               type="password"
               placeholder="Type your password"
               onChange={handleInputChange}

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import jwtDecode from 'jwt-decode';
 
 import AuthContext from './Auth.context';
-import { IJWTPayload, IUser } from 'types/user';
 import { postFetcher, putFetcher } from 'utils/fetcher';
 import { getToken, removeToken, setToken } from 'utils/storeToken';
+
+import type { IJWTPayload, IUser } from 'types/user';
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -14,6 +16,8 @@ type AuthProviderProps = {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const router = useRouter();
 
   const signUp = async (
     firstName: string,
@@ -24,29 +28,33 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   ) => {
     await postFetcher('/api/v1/auth/sign-up', { firstName, lastName, email, password, role });
 
-    toast.success('Sign up successful.');
+    toast.success('OTP has been sent to your email.');
+    router.push({ pathname: '/sign-up/activate', query: { email } });
   };
 
   const signIn = async (email: string, password: string) => {
     const { data } = await postFetcher('/api/v1/auth/sign-in', { email, password });
 
     setToken(data.token);
+    setIsAuthenticated(true);
 
     toast.success('Sign in successful.');
-    setIsAuthenticated(true);
+    router.push('/');
   };
 
   const signOut = () => {
     removeToken();
 
-    toast.success('Sign out successful.');
     setIsAuthenticated(false);
+
+    toast.success('Sign out successful.');
   };
 
   const activate = async (otp: string, email: string) => {
     await putFetcher('/api/v1/auth/activate', { otp, email });
 
     toast.success('Your account has been activated.');
+    router.push('/sign-in');
   };
 
   useEffect(() => {
