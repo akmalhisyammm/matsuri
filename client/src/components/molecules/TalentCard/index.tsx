@@ -31,7 +31,7 @@ const TalentCard = ({
       <div className="d-flex align-items-center gap-3 mt-3">
         <Image
           src={`${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`}
-          alt="semina"
+          alt="Talent Image"
           width={60}
           height={60}
           style={{ objectFit: 'cover', borderRadius: '50%' }}
@@ -54,13 +54,14 @@ const TalentCard = ({
                 <span>/person</span>
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-marker.svg" alt="semina" width={32} height={32} /> {location}
+                <Image src="/icons/ic-marker.svg" alt="Location Icon" width={32} height={32} />{' '}
+                {location}
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-time.svg" alt="semina" width={32} height={32} /> {time}
+                <Image src="/icons/ic-time.svg" alt="Time Icon" width={32} height={32} /> {time}
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-calendar.svg" alt="semina" width={32} height={32} /> {date}
+                <Image src="/icons/ic-calendar.svg" alt="Date Icon" width={32} height={32} /> {date}
               </div>
               <div style={{ width: 300 }}>
                 {ticket.stock ? (
