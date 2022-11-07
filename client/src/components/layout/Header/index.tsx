@@ -66,7 +66,7 @@ const Header = () => {
             </div>
 
             {router.pathname !== '/sign-in' && (
-              <div className={authCtx.user ? 'navbar-nav ms-auto' : 'd-grid'}>
+              <div className={authCtx.user ? 'navbar-nav mr-0' : 'd-grid'}>
                 {authCtx.user ? (
                   <div className="nav-item dropdown d-flex flex-column flex-lg-row align-items-lg-center authenticated gap-3">
                     <span className="text-light d-none d-lg-block">

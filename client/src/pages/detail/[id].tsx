@@ -9,7 +9,7 @@ const Detail = () => {
   const { id } = router.query;
 
   return (
-    <Layout title="Detail">
+    <Layout>
       <BannerDetail eventId={id as string} />
       <EventDetail eventId={id as string} />
       <EventList title="Similar Events" subtitle="Next One" />

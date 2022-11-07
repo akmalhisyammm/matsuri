@@ -1,3 +1,5 @@
+import { NextSeo } from 'next-seo';
+
 import { OrderList } from 'components/organisms';
 import Layout from 'components/layout';
 
@@ -5,7 +7,9 @@ import type { GetServerSideProps } from 'next/types';
 
 const Dashboard = () => {
   return (
-    <Layout title="Dashboard">
+    <Layout>
+      <NextSeo title="Dashboard" canonical={`${process.env.NEXT_PUBLIC_WEB_URL}/dashboard`} />
+
       <OrderList />
     </Layout>
   );

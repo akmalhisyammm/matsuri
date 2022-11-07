@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
+import { DefaultSeo } from 'next-seo';
 
 import { AuthProvider } from 'contexts/auth';
+
+import defaultSEOConfig from '../../next-seo.config';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,10 +19,14 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-      <ToastContainer position="top-right" />
-    </AuthProvider>
+    <>
+      <DefaultSeo {...defaultSEOConfig} />
+
+      <AuthProvider>
+        <Component {...pageProps} />
+        <ToastContainer position="top-right" />
+      </AuthProvider>
+    </>
   );
 };
 

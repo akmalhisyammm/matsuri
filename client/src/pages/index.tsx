@@ -3,7 +3,7 @@ import Layout from 'components/layout';
 
 const Home = () => {
   return (
-    <Layout title="Home">
+    <Layout>
       <SponsorList theme="light" />
       <EventList title="Featured Events" subtitle="Grow Today" />
       <Story />
