@@ -8,7 +8,7 @@ type KeypointItemProps = {
 const KeypointItem = ({ iconUrl, description }: KeypointItemProps) => {
   return (
     <div className="d-flex align-items-start gap-3">
-      <Image src={iconUrl} alt="Keypoint Icon" width={24} height={24} />
+      <Image src={iconUrl} alt="Keypoint" width={24} height={24} />
       <span>{description}</span>
     </div>
   );

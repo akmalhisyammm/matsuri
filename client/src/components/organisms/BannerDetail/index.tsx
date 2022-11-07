@@ -19,7 +19,7 @@ const BannerDetail = ({ eventId }: BannerDetailProps) => {
           <Image
             src={`${process.env.NEXT_PUBLIC_API_URL}/${data?.image.url}`}
             className="img-content"
-            alt="Event Image"
+            alt={data?.title}
             width={2414}
             height={500}
             priority
