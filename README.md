@@ -1,21 +1,21 @@
 # Matsuri
 
-Matsuri is an online ticketing platform and event management system. Matsuri provides an admin service system to sell event tickets and manage organized events. Matsuri is built using Next.js (Front-End), Express.js (Back-End), and MongoDB (Database).
+Matsuri is an online ticketing platform and event management system that helps organizer to create, promote, and sell tickets for their events. Matsuri provides an admin service system to sell event tickets and manage organized events. Matsuri is built using Next.js (Front-End), Express.js (Back-End), and MongoDB (Database).
 
 ## Tech Stack
 
-### Client
+#### Client:
 
 - Typescript
 - Next.js
 - Bootstrap
 
-### Server
+#### Server:
 
 - Javascript
 - Express.js
 
-### Database
+#### Database:
 
 - MongoDB
 
