@@ -7,7 +7,13 @@ const Footer = () => {
     <footer className="footer bg-navy">
       <div className="container">
         <CustomLink href="index.html">
-          <Image src="/images/logo.svg" alt="matsuri" width={124} height={27} />
+          <Image
+            src="/images/logo.png"
+            alt="Matsuri"
+            width={200}
+            height={0}
+            style={{ height: 'auto' }}
+          />
         </CustomLink>
 
         <div className="mt-3 d-flex flex-row flex-wrap footer-content align-items-baseline">

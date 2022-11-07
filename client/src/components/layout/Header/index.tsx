@@ -20,7 +20,13 @@ const Header = () => {
       <nav className="container navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
           <CustomLink variant="navbar-brand" href="/">
-            <Image src="/images/logo.svg" alt="matsuri" width={124} height={27} />
+            <Image
+              src="/images/logo.png"
+              alt="Matsuri"
+              width={150}
+              height={0}
+              style={{ height: 'auto' }}
+            />
           </CustomLink>
 
           <button
