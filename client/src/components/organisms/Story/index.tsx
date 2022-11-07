@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 import { CustomButton } from 'components/atoms';
 
 const Story = () => {
+  const router = useRouter();
+
   return (
     <section className="stories">
       <div className="d-flex flex-row justify-content-center align-items-center container">
@@ -33,7 +36,9 @@ const Story = () => {
             mendapatkan bantuan selama pandemic.
           </p>
 
-          <CustomButton variant="btn-navy">Read</CustomButton>
+          <CustomButton variant="btn-navy" action={() => router.push('/stories')}>
+            Read
+          </CustomButton>
         </div>
       </div>
     </section>
