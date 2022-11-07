@@ -10,7 +10,9 @@ const NotFound = ({ message }: NotFoundProps) => {
   const router = useRouter();
 
   return (
-    <section className="header bg-navy" style={{ height: 'auto' }}>
+    <section
+      className="header bg-navy"
+      style={{ height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div className="hero">
         <div className="hero-headline">
           This <span className="text-gradient-blue">Page</span> <br className="d-none d-lg-block" />

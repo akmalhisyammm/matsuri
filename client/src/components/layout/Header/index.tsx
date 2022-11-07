@@ -23,7 +23,7 @@ const Header = () => {
             <Image
               src="/images/logo.png"
               alt="Matsuri"
-              width={150}
+              width={100}
               height={0}
               style={{ height: 'auto' }}
             />
