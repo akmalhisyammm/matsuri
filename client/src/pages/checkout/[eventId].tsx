@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 
 import { CheckoutDetail, CheckoutForm } from 'components/organisms';
 import Layout from 'components/layout';
@@ -11,7 +12,12 @@ const Checkout = () => {
   const { eventId, ticketId, organizerId } = router.query;
 
   return (
-    <Layout title="Checkout">
+    <Layout>
+      <NextSeo
+        title="Checkout"
+        canonical={`${process.env.NEXT_PUBLIC_WEB_URL}/checkout/${eventId}`}
+      />
+
       <section className="bg-navy">
         <div className="checkout container">
           <div className="text-center checkout-title">Boost Your Knowledge and Experience</div>
