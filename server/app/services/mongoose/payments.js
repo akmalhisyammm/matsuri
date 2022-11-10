@@ -6,7 +6,7 @@ const getAllPayments = async (req) => {
   const { organizer } = req.user;
 
   const result = await Payments.find({ organizer })
-    .populate({ path: 'image', select: '_id name' })
+    .populate({ path: 'image', select: '_id url' })
     .select('_id type status image');
 
   return result;
@@ -27,7 +27,7 @@ const getPaymentByIdAndOrganizer = async (req) => {
   const { organizer } = req.user;
 
   const result = await Payments.findOne({ _id: id, organizer })
-    .populate({ path: 'image', select: '_id name' })
+    .populate({ path: 'image', select: '_id url' })
     .select('_id type status image');
 
   if (!result) {
