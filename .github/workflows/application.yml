@@ -38,6 +38,39 @@ jobs:
       - name: Build client app
         run: yarn build
 
+  cms:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./cms
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: ./cms/yarn.lock
+
+      - name: Install all client dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Format check client app
+        run: yarn format:check
+
+      - name: Lint client app
+        run: yarn lint
+
+      - name: Type check client app
+        run: yarn type:check
+
+      - name: Build client app
+        run: yarn build
+
   server:
     runs-on: ubuntu-latest
 
