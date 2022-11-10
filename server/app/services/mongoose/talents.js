@@ -13,7 +13,7 @@ const getAllTalents = async (req) => {
   }
 
   const result = await Talents.find(conditions)
-    .populate({ path: 'image', select: '_id name' })
+    .populate({ path: 'image', select: '_id url' })
     .select('_id name role image');
 
   return result;
@@ -34,7 +34,7 @@ const getTalentByIdAndOrganizer = async (req) => {
   const { organizer } = req.user;
 
   const result = await Talents.findOne({ _id: id, organizer })
-    .populate({ path: 'image', select: '_id name' })
+    .populate({ path: 'image', select: '_id url' })
     .select('_id name role image');
 
   if (!result) {
