@@ -1,12 +1,18 @@
-import { SignInForm } from 'components/organisms';
+import { Heading } from '@chakra-ui/react';
+
+import { CategoriesTable } from 'components/organisms';
 import Layout from 'components/layout';
 
 import type { GetServerSideProps } from 'next/types';
 
-const Home = () => {
+const Categories = () => {
   return (
     <Layout>
-      <SignInForm />
+      <Heading as="h1" fontSize="3xl" marginBottom={8}>
+        Categories
+      </Heading>
+
+      <CategoriesTable />
     </Layout>
   );
 };
@@ -14,10 +20,10 @@ const Home = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { token } = context.req.cookies;
 
-  if (token) {
+  if (!token) {
     return {
       redirect: {
-        destination: '/dashboard',
+        destination: '/',
         permanent: false,
       },
     };
@@ -28,4 +34,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Home;
+export default Categories;
