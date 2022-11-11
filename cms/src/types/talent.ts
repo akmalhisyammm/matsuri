@@ -1,8 +1,8 @@
 import type { IImage } from './image';
 
-export interface IPayment {
+export interface ITalent {
   _id: string;
-  type: string;
-  status: boolean;
+  name: string;
+  role: string;
   image: IImage;
 }
