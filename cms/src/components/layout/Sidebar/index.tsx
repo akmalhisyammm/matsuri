@@ -1,6 +1,6 @@
 import { Box, Button, Image, useColorMode, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { FaCalendar, FaCreditCard, FaHome, FaList, FaReceipt } from 'react-icons/fa';
+import { FaCalendar, FaCreditCard, FaHome, FaList, FaReceipt, FaStar } from 'react-icons/fa';
 
 const Sidebar = () => {
   const router = useRouter();
@@ -45,6 +45,15 @@ const Sidebar = () => {
           leftIcon={<FaCreditCard />}
           onClick={() => router.push('/payments')}>
           Payments
+        </Button>
+        <Button
+          variant={router.pathname === '/talents' ? 'solid' : 'ghost'}
+          colorScheme="blue"
+          width="full"
+          justifyContent="start"
+          leftIcon={<FaStar />}
+          onClick={() => router.push('/talents')}>
+          Talents
         </Button>
         <Button
           variant={router.pathname === '/events' ? 'solid' : 'ghost'}
