@@ -3,32 +3,32 @@ import { useEffect, useState } from 'react';
 
 import { getToken } from 'utils/storeToken';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
-import CategoryContext from './Category.context';
+import PaymentContext from './Payment.context';
 
-import type { ICategory } from 'types/category';
+import type { IPayment } from 'types/payment';
 
-type CategoryProviderProps = {
+type PaymentProviderProps = {
   children: React.ReactNode;
 };
 
-const CategoryProvider = ({ children }: CategoryProviderProps) => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
+const PaymentProvider = ({ children }: PaymentProviderProps) => {
+  const [payments, setPayments] = useState<IPayment[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
   const token = getToken();
 
-  const create = async (name: string) => {
+  const create = async (type: string, imageId: string, imageUrl: string) => {
     setIsLoading(true);
 
     try {
-      const { data } = await postFetcher('/categories', { name }, token);
+      const { data } = await postFetcher('/payments', { type, imageId }, token);
 
-      setCategories([...categories, data]);
+      setPayments([...payments, { ...data, image: { _id: imageId, url: imageUrl } }]);
 
       toast({
         title: 'Success',
-        description: `${data.name} has been created.`,
+        description: `${data.type} has been created.`,
         status: 'success',
         duration: 3000,
       });
@@ -46,25 +46,25 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
     setIsLoading(false);
   };
 
-  const update = async (id: string, name: string) => {
+  const update = async (id: string, type: string, imageId: string, imageUrl: string) => {
     setIsLoading(true);
 
     try {
-      const { data } = await putFetcher(`/categories/${id}`, { name }, token);
+      const { data } = await putFetcher(`/payments/${id}`, { type, imageId }, token);
 
-      const updatedCategories = categories.map((category) => {
-        if (category._id === id) {
-          return data;
+      const updatedPayments = payments.map((payment) => {
+        if (payment._id === id) {
+          return { ...data, image: { _id: imageId, url: imageUrl } };
         }
 
-        return category;
+        return payment;
       });
 
-      setCategories(updatedCategories);
+      setPayments(updatedPayments);
 
       toast({
         title: 'Success',
-        description: `${data.name} has been updated.`,
+        description: `${data.type} has been updated.`,
         status: 'success',
         duration: 3000,
       });
@@ -86,15 +86,15 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
     setIsLoading(true);
 
     try {
-      const { data } = await deleteFetcher(`/categories/${id}`, token);
+      const { data } = await deleteFetcher(`/payments/${id}`, token);
 
-      const updatedCategories = categories.filter((category) => category._id !== id);
+      const updatedPayments = payments.filter((payment) => payment._id !== id);
 
-      setCategories(updatedCategories);
+      setPayments(updatedPayments);
 
       toast({
         title: 'Success',
-        description: `${data.name} has been deleted.`,
+        description: `${data.type} has been deleted.`,
         status: 'success',
         duration: 3000,
       });
@@ -117,9 +117,9 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
       setIsLoading(true);
 
       if (token) {
-        const { data } = await getFetcher('/categories', {}, token);
+        const { data } = await getFetcher('/payments', {}, token);
 
-        setCategories(data);
+        setPayments(data);
       }
 
       setIsLoading(false);
@@ -129,10 +129,10 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
   }, [token]);
 
   return (
-    <CategoryContext.Provider value={{ categories, isLoading, create, update, destroy }}>
+    <PaymentContext.Provider value={{ payments, isLoading, create, update, destroy }}>
       {children}
-    </CategoryContext.Provider>
+    </PaymentContext.Provider>
   );
 };
 
-export default CategoryProvider;
+export default PaymentProvider;

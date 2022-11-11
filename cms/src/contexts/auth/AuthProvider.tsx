@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 
-import AuthContext from './Auth.context';
 import { postFetcher } from 'utils/fetcher';
 import { getToken, removeToken, setToken } from 'utils/storeToken';
+import AuthContext from './Auth.context';
 
 import type { IJWTPayload, IUser } from 'types/user';
 
