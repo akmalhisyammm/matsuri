@@ -18,8 +18,14 @@ import { FaEdit, FaPlus, FaSave, FaTimes, FaTrash, FaUpload } from 'react-icons/
 import { PaymentContext } from 'contexts/payment';
 import { ImageContext } from 'contexts/image';
 
+import type { IPayment } from 'types/payment';
+
 const PaymentsTable = () => {
-  const [form, setForm] = useState<{ imageId: string; type: string }>({ imageId: '', type: '' });
+  const [form, setForm] = useState<{ type: string; imageId: string; imageUrl: string }>({
+    type: '',
+    imageId: '',
+    imageUrl: '',
+  });
   const [updateId, setUpdateId] = useState<string>('');
   const [isAdding, setIsAdding] = useState<boolean>(false);
 
@@ -51,14 +57,14 @@ const PaymentsTable = () => {
     imagesCtx.remove();
   };
 
-  const handleEditClick = (id: string, imageId: string, type: string) => {
+  const handleEditClick = (payment: IPayment) => {
     setIsAdding(false);
-    setForm({ imageId, type });
-    setUpdateId(id);
+    setForm({ type: payment.type, imageId: payment.image._id, imageUrl: payment.image.url });
+    setUpdateId(payment._id);
   };
 
   const handleCancelClick = () => {
-    setForm({ imageId: '', type: '' });
+    setForm({ type: '', imageId: '', imageUrl: '' });
     setUpdateId('');
     setIsAdding(false);
 
@@ -67,21 +73,17 @@ const PaymentsTable = () => {
 
   const handleSaveClick = (actionType: 'create' | 'update') => {
     if (actionType === 'create') {
-      paymentsCtx.create(
-        form.type,
-        imagesCtx.image?._id || form.imageId,
-        imagesCtx.image?.url || ''
-      );
+      paymentsCtx.create(form.type, imagesCtx.image?._id || '', imagesCtx.image?.url || '');
     } else {
       paymentsCtx.update(
         updateId,
         form.type,
         imagesCtx.image?._id || form.imageId,
-        imagesCtx.image?.url || ''
+        imagesCtx.image?.url || form.imageUrl
       );
     }
 
-    setForm({ imageId: '', type: '' });
+    setForm({ type: '', imageId: '', imageUrl: '' });
     setUpdateId('');
     setIsAdding(false);
 
@@ -124,12 +126,7 @@ const PaymentsTable = () => {
                       aria-label="Edit"
                       icon={<FaEdit />}
                       isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
-                      onClick={handleEditClick.bind(
-                        null,
-                        payment._id,
-                        payment.image._id,
-                        payment.type
-                      )}
+                      onClick={handleEditClick.bind(null, payment)}
                     />
                     <IconButton
                       colorScheme="red"
