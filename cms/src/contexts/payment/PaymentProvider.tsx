@@ -1,11 +1,12 @@
 import { useToast } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
+import { ImageContext } from 'contexts/image';
 import { getToken } from 'utils/storeToken';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
 import PaymentContext from './Payment.context';
 
-import type { IPayment } from 'types/payment';
+import type { IPayment, IPaymentPayload } from 'types/payment';
 
 type PaymentProviderProps = {
   children: React.ReactNode;
@@ -15,16 +16,21 @@ const PaymentProvider = ({ children }: PaymentProviderProps) => {
   const [payments, setPayments] = useState<IPayment[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const imagesCtx = useContext(ImageContext);
   const toast = useToast();
   const token = getToken();
 
-  const create = async (type: string, imageId: string, imageUrl: string) => {
+  const create = async (payload: IPaymentPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await postFetcher('/payments', { type, imageId }, token);
+      const { data } = await postFetcher('/payments', payload, token);
 
-      setPayments([...payments, { ...data, image: { _id: imageId, url: imageUrl } }]);
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
+
+      const updatedPayments = [...payments, { ...data, image }];
+
+      setPayments(updatedPayments);
 
       toast({
         title: 'Success',
@@ -46,15 +52,17 @@ const PaymentProvider = ({ children }: PaymentProviderProps) => {
     setIsLoading(false);
   };
 
-  const update = async (id: string, type: string, imageId: string, imageUrl: string) => {
+  const update = async (id: string, payload: IPaymentPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await putFetcher(`/payments/${id}`, { type, imageId }, token);
+      const { data } = await putFetcher(`/payments/${id}`, payload, token);
+
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
 
       const updatedPayments = payments.map((payment) => {
         if (payment._id === id) {
-          return { ...data, image: { _id: imageId, url: imageUrl } };
+          return { ...data, image };
         }
 
         return payment;

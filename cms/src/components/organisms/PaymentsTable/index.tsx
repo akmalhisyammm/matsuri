@@ -18,76 +18,75 @@ import { FaEdit, FaPlus, FaSave, FaTimes, FaTrash, FaUpload } from 'react-icons/
 import { PaymentContext } from 'contexts/payment';
 import { ImageContext } from 'contexts/image';
 
-import type { IPayment } from 'types/payment';
+import type { IPayment, IPaymentPayload } from 'types/payment';
 
 const PaymentsTable = () => {
-  const [form, setForm] = useState<{ type: string; imageId: string; imageUrl: string }>({
-    type: '',
-    imageId: '',
-    imageUrl: '',
-  });
-  const [updateId, setUpdateId] = useState<string>('');
-  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [form, setForm] = useState<IPaymentPayload>({ type: '', imageId: '' });
+  const [editedPayment, setEditedPayment] = useState<IPayment>();
+  const [isAdding, setIsAdding] = useState(false);
 
   const imageRef = useRef<HTMLInputElement>(null);
 
   const paymentsCtx = useContext(PaymentContext);
   const imagesCtx = useContext(ImageContext);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const resetForm = () => {
+    setForm({ type: '', imageId: '' });
+    setEditedPayment(undefined);
+    setIsAdding(false);
 
-    setForm({ ...form, [name]: value });
+    imagesCtx.remove();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLElement>) => {
+    const { name, value, files } = e.target as HTMLInputElement;
 
-    if (files) {
-      imagesCtx.upload(files[0]);
-
-      setForm({ ...form, imageId: '' });
+    switch (name) {
+      case 'image': {
+        if (files) {
+          imagesCtx.upload(files[0]);
+        }
+        break;
+      }
+      default: {
+        setForm({ ...form, [name]: value });
+        break;
+      }
     }
   };
 
   const handleAddClick = () => {
-    setUpdateId('');
+    setEditedPayment(undefined);
     setIsAdding(true);
 
     imagesCtx.remove();
   };
 
   const handleEditClick = (payment: IPayment) => {
+    setForm({
+      type: payment.type,
+      imageId: payment.image._id,
+    });
+    setEditedPayment(payment);
     setIsAdding(false);
-    setForm({ type: payment.type, imageId: payment.image._id, imageUrl: payment.image.url });
-    setUpdateId(payment._id);
+
+    imagesCtx.set(payment.image);
   };
 
   const handleCancelClick = () => {
-    setForm({ type: '', imageId: '', imageUrl: '' });
-    setUpdateId('');
-    setIsAdding(false);
-
-    imagesCtx.remove();
+    resetForm();
   };
 
-  const handleSaveClick = (actionType: 'create' | 'update') => {
-    if (actionType === 'create') {
-      paymentsCtx.create(form.type, imagesCtx.image?._id || '', imagesCtx.image?.url || '');
+  const handleSaveClick = () => {
+    const payload = { ...form, imageId: imagesCtx.image?._id || '' };
+
+    if (!editedPayment) {
+      paymentsCtx.create(payload);
     } else {
-      paymentsCtx.update(
-        updateId,
-        form.type,
-        imagesCtx.image?._id || form.imageId,
-        imagesCtx.image?.url || form.imageUrl
-      );
+      paymentsCtx.update(editedPayment._id, payload);
     }
 
-    setForm({ type: '', imageId: '', imageUrl: '' });
-    setUpdateId('');
-    setIsAdding(false);
-
-    imagesCtx.remove();
+    resetForm();
   };
 
   const handleDeleteClick = (id: string) => {
@@ -100,15 +99,15 @@ const PaymentsTable = () => {
       <Table size="sm">
         <Thead>
           <Tr>
-            <Th>Image</Th>
-            <Th width="full">Type</Th>
-            <Th>Action</Th>
+            <Th width="10%">Image</Th>
+            <Th width="90%">Type</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
 
         <Tbody>
           {paymentsCtx.payments.map((payment) =>
-            payment._id !== updateId ? (
+            payment._id !== editedPayment?._id ? (
               <Tr key={payment._id}>
                 <Td>
                   <Image
@@ -149,12 +148,15 @@ const PaymentsTable = () => {
                     size="sm"
                     display="none"
                     ref={imageRef}
-                    onChange={handleImageChange}
+                    onChange={handleInputChange}
                   />
                   <IconButton
                     variant="outline"
+                    colorScheme={imagesCtx.image ? 'yellow' : 'blue'}
                     size="sm"
                     width="full"
+                    height="full"
+                    minHeight={8}
                     aria-label="Save"
                     icon={
                       <Image
@@ -162,7 +164,10 @@ const PaymentsTable = () => {
                           imagesCtx.image?.url || payment.image.url
                         }`}
                         alt={form.type}
-                        padding={0.5}
+                        width="full"
+                        height="full"
+                        objectFit="cover"
+                        padding={1}
                       />
                     }
                     isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
@@ -175,7 +180,7 @@ const PaymentsTable = () => {
                     id="editType"
                     name="type"
                     size="sm"
-                    defaultValue={form.type}
+                    value={form.type}
                     onChange={handleInputChange}
                   />
                 </Td>
@@ -188,10 +193,9 @@ const PaymentsTable = () => {
                       icon={<FaSave />}
                       isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
                       isDisabled={!form.type}
-                      onClick={handleSaveClick.bind(null, 'update')}
+                      onClick={handleSaveClick}
                     />
                     <IconButton
-                      colorScheme="gray"
                       size="sm"
                       aria-label="Cancel"
                       icon={<FaTimes />}
@@ -204,29 +208,50 @@ const PaymentsTable = () => {
             )
           )}
 
-          {isAdding ? (
+          {!isAdding ? (
+            <Tr>
+              <Td colSpan={3}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blue"
+                  size="sm"
+                  width="full"
+                  leftIcon={<FaPlus />}
+                  isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
+                  onClick={handleAddClick}>
+                  Add
+                </Button>
+              </Td>
+            </Tr>
+          ) : (
             <Tr>
               <Td>
                 <Input
                   type="file"
-                  id="editImage"
+                  id="addImage"
                   name="image"
                   size="sm"
                   display="none"
                   ref={imageRef}
-                  onChange={handleImageChange}
+                  onChange={handleInputChange}
                 />
                 <IconButton
                   variant="outline"
+                  colorScheme={imagesCtx.image ? 'yellow' : 'blue'}
                   size="sm"
                   width="full"
+                  height="full"
+                  minHeight={8}
                   aria-label="Save"
                   icon={
                     imagesCtx.image ? (
                       <Image
                         src={`${process.env.NEXT_PUBLIC_API_URL}/${imagesCtx.image.url}`}
                         alt={form.type}
-                        padding={0.5}
+                        width="full"
+                        height="full"
+                        objectFit="cover"
+                        padding={1}
                       />
                     ) : (
                       <FaUpload />
@@ -254,10 +279,9 @@ const PaymentsTable = () => {
                     icon={<FaSave />}
                     isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
                     isDisabled={!form.type || !imagesCtx.image}
-                    onClick={handleSaveClick.bind(null, 'create')}
+                    onClick={handleSaveClick}
                   />
                   <IconButton
-                    colorScheme="gray"
                     size="sm"
                     aria-label="Cancel"
                     icon={<FaTimes />}
@@ -265,20 +289,6 @@ const PaymentsTable = () => {
                     onClick={handleCancelClick}
                   />
                 </ButtonGroup>
-              </Td>
-            </Tr>
-          ) : (
-            <Tr>
-              <Td colSpan={3}>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  size="sm"
-                  width="full"
-                  leftIcon={<FaPlus />}
-                  onClick={handleAddClick}>
-                  Add
-                </Button>
               </Td>
             </Tr>
           )}

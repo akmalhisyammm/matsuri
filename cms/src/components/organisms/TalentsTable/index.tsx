@@ -4,107 +4,105 @@ import {
   IconButton,
   Image,
   Input,
+  List,
+  ListIcon,
+  ListItem,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useContext, useRef, useState } from 'react';
-import { FaEdit, FaPlus, FaSave, FaTimes, FaTrash, FaUpload } from 'react-icons/fa';
+import {
+  FaCheckCircle,
+  FaEdit,
+  FaPlus,
+  FaSave,
+  FaTimes,
+  FaTimesCircle,
+  FaTrash,
+  FaUpload,
+} from 'react-icons/fa';
 
 import { TalentContext } from 'contexts/talent';
+import { EventContext } from 'contexts/event';
 import { ImageContext } from 'contexts/image';
 
-import type { ITalent } from 'types/talent';
+import type { ITalent, ITalentPayload } from 'types/talent';
 
 const TalentsTable = () => {
-  const [form, setForm] = useState<{
-    name: string;
-    role: string;
-    imageId: string;
-    imageUrl: string;
-  }>({
-    name: '',
-    role: '',
-    imageId: '',
-    imageUrl: '',
-  });
-  const [updateId, setUpdateId] = useState<string>('');
-  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [form, setForm] = useState<ITalentPayload>({ name: '', role: '', imageId: '' });
+  const [editedTalent, setEditedTalent] = useState<ITalent>();
+  const [isAdding, setIsAdding] = useState(false);
 
   const imageRef = useRef<HTMLInputElement>(null);
 
   const talentsCtx = useContext(TalentContext);
+  const eventsCtx = useContext(EventContext);
   const imagesCtx = useContext(ImageContext);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const resetForm = () => {
+    setForm({ name: '', role: '', imageId: '' });
+    setEditedTalent(undefined);
+    setIsAdding(false);
 
-    setForm({ ...form, [name]: value });
+    imagesCtx.remove();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLElement>) => {
+    const { name, value, files } = e.target as HTMLInputElement;
 
-    if (files) {
-      imagesCtx.upload(files[0]);
-
-      setForm({ ...form, imageId: '' });
+    switch (name) {
+      case 'image': {
+        if (files) {
+          imagesCtx.upload(files[0]);
+        }
+        break;
+      }
+      default: {
+        setForm({ ...form, [name]: value });
+        break;
+      }
     }
   };
 
   const handleAddClick = () => {
-    setUpdateId('');
+    setEditedTalent(undefined);
     setIsAdding(true);
 
     imagesCtx.remove();
   };
 
   const handleEditClick = (talent: ITalent) => {
-    setIsAdding(false);
     setForm({
       name: talent.name,
       role: talent.role,
       imageId: talent.image._id,
-      imageUrl: talent.image.url,
     });
-    setUpdateId(talent._id);
+    setEditedTalent(talent);
+    setIsAdding(false);
+
+    imagesCtx.set(talent.image);
   };
 
   const handleCancelClick = () => {
-    setForm({ name: '', role: '', imageId: '', imageUrl: '' });
-    setUpdateId('');
-    setIsAdding(false);
-
-    imagesCtx.remove();
+    resetForm();
   };
 
-  const handleSaveClick = (actionType: 'create' | 'update') => {
-    if (actionType === 'create') {
-      talentsCtx.create(
-        form.name,
-        form.role,
-        imagesCtx.image?._id || '',
-        imagesCtx.image?.url || ''
-      );
+  const handleSaveClick = () => {
+    const payload = { ...form, imageId: imagesCtx.image?._id || '' };
+
+    if (!editedTalent) {
+      talentsCtx.create(payload);
     } else {
-      talentsCtx.update(
-        updateId,
-        form.name,
-        form.role,
-        imagesCtx.image?._id || form.imageId,
-        imagesCtx.image?.url || form.imageUrl
-      );
+      talentsCtx.update(editedTalent._id, payload);
     }
 
-    setForm({ name: '', role: '', imageId: '', imageUrl: '' });
-    setUpdateId('');
-    setIsAdding(false);
-
-    imagesCtx.remove();
+    resetForm();
   };
 
   const handleDeleteClick = (id: string) => {
@@ -117,16 +115,17 @@ const TalentsTable = () => {
       <Table size="sm">
         <Thead>
           <Tr>
-            <Th>Image</Th>
-            <Th width="50%">Name</Th>
-            <Th width="50%">Role</Th>
-            <Th>Action</Th>
+            <Th width="10%">Image</Th>
+            <Th width="30%">Name</Th>
+            <Th width="30%">Role</Th>
+            <Th width="30%">Related Events</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
 
         <Tbody>
           {talentsCtx.talents.map((talent) =>
-            talent._id !== updateId ? (
+            talent._id !== editedTalent?._id ? (
               <Tr key={talent._id}>
                 <Td>
                   <Image
@@ -138,6 +137,27 @@ const TalentsTable = () => {
                 <Td>{talent.name}</Td>
                 <Td>{talent.role}</Td>
                 <Td>
+                  <List spacing={2}>
+                    {eventsCtx.events.filter((event) => event.talent._id === talent._id).length ===
+                    0 ? (
+                      <ListItem>
+                        <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                        No related events
+                      </ListItem>
+                    ) : (
+                      eventsCtx.events.map(
+                        (event) =>
+                          event.talent._id === talent._id && (
+                            <ListItem key={event._id}>
+                              <ListIcon as={FaCheckCircle} color="green.500" marginBottom={0.5} />
+                              {event.title}
+                            </ListItem>
+                          )
+                      )
+                    )}
+                  </List>
+                </Td>
+                <Td>
                   <ButtonGroup>
                     <IconButton
                       colorScheme="yellow"
@@ -147,14 +167,26 @@ const TalentsTable = () => {
                       isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
                       onClick={handleEditClick.bind(null, talent)}
                     />
-                    <IconButton
-                      colorScheme="red"
-                      size="sm"
-                      aria-label="Delete"
-                      icon={<FaTrash />}
-                      isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
-                      onClick={handleDeleteClick.bind(null, talent._id)}
-                    />
+                    <Tooltip
+                      label="Unable to delete talent with related events"
+                      placement="bottom-start"
+                      isDisabled={
+                        eventsCtx.events.filter((event) => event.talent._id === talent._id)
+                          .length === 0
+                      }
+                      hasArrow>
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        aria-label="Delete"
+                        icon={<FaTrash />}
+                        isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
+                        isDisabled={eventsCtx.events.some(
+                          (event) => event.talent._id === talent._id
+                        )}
+                        onClick={handleDeleteClick.bind(null, talent._id)}
+                      />
+                    </Tooltip>
                   </ButtonGroup>
                 </Td>
               </Tr>
@@ -168,12 +200,15 @@ const TalentsTable = () => {
                     size="sm"
                     display="none"
                     ref={imageRef}
-                    onChange={handleImageChange}
+                    onChange={handleInputChange}
                   />
                   <IconButton
                     variant="outline"
+                    colorScheme={imagesCtx.image ? 'yellow' : 'blue'}
                     size="sm"
                     width="full"
+                    height="full"
+                    minHeight={8}
                     aria-label="Save"
                     icon={
                       <Image
@@ -181,7 +216,10 @@ const TalentsTable = () => {
                           imagesCtx.image?.url || talent.image.url
                         }`}
                         alt={form.name}
-                        padding={0.5}
+                        width="full"
+                        height="full"
+                        objectFit="cover"
+                        padding={1}
                       />
                     }
                     isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
@@ -194,7 +232,7 @@ const TalentsTable = () => {
                     id="editName"
                     name="name"
                     size="sm"
-                    defaultValue={form.name}
+                    value={form.name}
                     onChange={handleInputChange}
                   />
                 </Td>
@@ -204,9 +242,30 @@ const TalentsTable = () => {
                     id="editRole"
                     name="role"
                     size="sm"
-                    defaultValue={form.role}
+                    value={form.role}
                     onChange={handleInputChange}
                   />
+                </Td>
+                <Td>
+                  <List spacing={2}>
+                    {eventsCtx.events.filter((event) => event.talent._id === talent._id).length ===
+                    0 ? (
+                      <ListItem>
+                        <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                        No related events
+                      </ListItem>
+                    ) : (
+                      eventsCtx.events.map(
+                        (event) =>
+                          event.talent._id === talent._id && (
+                            <ListItem key={event._id}>
+                              <ListIcon as={FaCheckCircle} color="green.500" marginBottom={0.5} />
+                              {event.title}
+                            </ListItem>
+                          )
+                      )
+                    )}
+                  </List>
                 </Td>
                 <Td>
                   <ButtonGroup>
@@ -217,7 +276,7 @@ const TalentsTable = () => {
                       icon={<FaSave />}
                       isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
                       isDisabled={!form.name}
-                      onClick={handleSaveClick.bind(null, 'update')}
+                      onClick={handleSaveClick}
                     />
                     <IconButton
                       size="sm"
@@ -232,29 +291,50 @@ const TalentsTable = () => {
             )
           )}
 
-          {isAdding ? (
+          {!isAdding ? (
+            <Tr>
+              <Td colSpan={5}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blue"
+                  size="sm"
+                  width="full"
+                  leftIcon={<FaPlus />}
+                  isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
+                  onClick={handleAddClick}>
+                  Add
+                </Button>
+              </Td>
+            </Tr>
+          ) : (
             <Tr>
               <Td>
                 <Input
                   type="file"
-                  id="editImage"
+                  id="addImage"
                   name="image"
                   size="sm"
                   display="none"
                   ref={imageRef}
-                  onChange={handleImageChange}
+                  onChange={handleInputChange}
                 />
                 <IconButton
                   variant="outline"
+                  colorScheme={imagesCtx.image ? 'yellow' : 'blue'}
                   size="sm"
                   width="full"
+                  height="full"
+                  minHeight={8}
                   aria-label="Save"
                   icon={
                     imagesCtx.image ? (
                       <Image
                         src={`${process.env.NEXT_PUBLIC_API_URL}/${imagesCtx.image.url}`}
                         alt={form.name}
-                        padding={0.5}
+                        width="full"
+                        height="full"
+                        objectFit="cover"
+                        padding={1}
                       />
                     ) : (
                       <FaUpload />
@@ -283,6 +363,14 @@ const TalentsTable = () => {
                 />
               </Td>
               <Td>
+                <List spacing={2}>
+                  <ListItem>
+                    <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                    No related events
+                  </ListItem>
+                </List>
+              </Td>
+              <Td>
                 <ButtonGroup>
                   <IconButton
                     colorScheme="green"
@@ -291,7 +379,7 @@ const TalentsTable = () => {
                     icon={<FaSave />}
                     isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
                     isDisabled={!form.name || !imagesCtx.image}
-                    onClick={handleSaveClick.bind(null, 'create')}
+                    onClick={handleSaveClick}
                   />
                   <IconButton
                     size="sm"
@@ -301,20 +389,6 @@ const TalentsTable = () => {
                     onClick={handleCancelClick}
                   />
                 </ButtonGroup>
-              </Td>
-            </Tr>
-          ) : (
-            <Tr>
-              <Td colSpan={4}>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  size="sm"
-                  width="full"
-                  leftIcon={<FaPlus />}
-                  onClick={handleAddClick}>
-                  Add
-                </Button>
               </Td>
             </Tr>
           )}

@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
-import type { ITalent } from 'types/talent';
+import type { ITalent, ITalentPayload } from 'types/talent';
 
 interface ITalentContext {
   talents: ITalent[];
   isLoading: boolean;
-  create: (name: string, role: string, imageId: string, imageUrl: string) => void;
-  update: (id: string, name: string, role: string, imageId: string, imageUrl: string) => void;
+  create: (payload: ITalentPayload) => void;
+  update: (id: string, payload: ITalentPayload) => void;
   destroy: (id: string) => void;
 }
 

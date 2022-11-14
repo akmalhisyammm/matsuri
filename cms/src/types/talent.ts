@@ -6,3 +6,9 @@ export interface ITalent {
   role: string;
   image: IImage;
 }
+
+export interface ITalentPayload {
+  name: string;
+  role: string;
+  imageId: string;
+}

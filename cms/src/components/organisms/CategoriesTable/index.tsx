@@ -3,59 +3,77 @@ import {
   ButtonGroup,
   IconButton,
   Input,
+  List,
+  ListIcon,
+  ListItem,
   Table,
   TableContainer,
   Tbody,
   Td,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
-import { FaEdit, FaPlus, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
+import {
+  FaCheckCircle,
+  FaEdit,
+  FaPlus,
+  FaSave,
+  FaTimes,
+  FaTimesCircle,
+  FaTrash,
+} from 'react-icons/fa';
 
 import { CategoryContext } from 'contexts/category';
+import { EventContext } from 'contexts/event';
+
+import type { ICategory, ICategoryPayload } from 'types/category';
 
 const CategoriesTable = () => {
-  const [form, setForm] = useState<{ name: string }>({ name: '' });
-  const [updateId, setUpdateId] = useState<string>('');
-  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [form, setForm] = useState<ICategoryPayload>({ name: '' });
+  const [editedCategory, setEditedCategory] = useState<ICategory>();
+  const [isAdding, setIsAdding] = useState(false);
 
   const categoriesCtx = useContext(CategoryContext);
+  const eventsCtx = useContext(EventContext);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const resetForm = () => {
+    setForm({ name: '' });
+    setEditedCategory(undefined);
+    setIsAdding(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
 
     setForm({ ...form, [name]: value });
   };
 
   const handleAddClick = () => {
-    setUpdateId('');
+    setEditedCategory(undefined);
     setIsAdding(true);
   };
 
-  const handleEditClick = (id: string, name: string) => {
+  const handleEditClick = (category: ICategory) => {
+    setForm({ name: category.name });
+    setEditedCategory(category);
     setIsAdding(false);
-    setForm({ name });
-    setUpdateId(id);
   };
 
   const handleCancelClick = () => {
-    setForm({ name: '' });
-    setUpdateId('');
-    setIsAdding(false);
+    resetForm();
   };
 
-  const handleSaveClick = (actionType: 'create' | 'update') => {
-    if (actionType === 'create') {
-      categoriesCtx.create(form.name);
+  const handleSaveClick = () => {
+    if (!editedCategory) {
+      categoriesCtx.create(form);
     } else {
-      categoriesCtx.update(updateId, form.name);
+      categoriesCtx.update(editedCategory._id, form);
     }
 
-    setForm({ name: '' });
-    setUpdateId('');
-    setIsAdding(false);
+    resetForm();
   };
 
   const handleDeleteClick = (id: string) => {
@@ -67,16 +85,38 @@ const CategoriesTable = () => {
       <Table size="sm">
         <Thead>
           <Tr>
-            <Th width="full">Name</Th>
-            <Th>Action</Th>
+            <Th width="50%">Name</Th>
+            <Th width="50%">Related Events</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
 
         <Tbody>
           {categoriesCtx.categories.map((category) =>
-            category._id !== updateId ? (
+            category._id !== editedCategory?._id ? (
               <Tr key={category._id}>
                 <Td>{category.name}</Td>
+                <Td>
+                  <List spacing={2}>
+                    {eventsCtx.events.filter((event) => event.category._id === category._id)
+                      .length === 0 ? (
+                      <ListItem>
+                        <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                        No related events
+                      </ListItem>
+                    ) : (
+                      eventsCtx.events.map(
+                        (event) =>
+                          event.category._id === category._id && (
+                            <ListItem key={event._id}>
+                              <ListIcon as={FaCheckCircle} color="green.500" marginBottom={0.5} />
+                              {event.title}
+                            </ListItem>
+                          )
+                      )
+                    )}
+                  </List>
+                </Td>
                 <Td>
                   <ButtonGroup>
                     <IconButton
@@ -85,16 +125,28 @@ const CategoriesTable = () => {
                       aria-label="Edit"
                       icon={<FaEdit />}
                       isLoading={categoriesCtx.isLoading}
-                      onClick={handleEditClick.bind(null, category._id, category.name)}
+                      onClick={handleEditClick.bind(null, category)}
                     />
-                    <IconButton
-                      colorScheme="red"
-                      size="sm"
-                      aria-label="Delete"
-                      icon={<FaTrash />}
-                      isLoading={categoriesCtx.isLoading}
-                      onClick={handleDeleteClick.bind(null, category._id)}
-                    />
+                    <Tooltip
+                      label="Unable to delete category with related events"
+                      placement="bottom-start"
+                      isDisabled={
+                        eventsCtx.events.filter((event) => event.category._id === category._id)
+                          .length === 0
+                      }
+                      hasArrow>
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        aria-label="Delete"
+                        icon={<FaTrash />}
+                        isLoading={categoriesCtx.isLoading}
+                        isDisabled={eventsCtx.events.some(
+                          (event) => event.category._id === category._id
+                        )}
+                        onClick={handleDeleteClick.bind(null, category._id)}
+                      />
+                    </Tooltip>
                   </ButtonGroup>
                 </Td>
               </Tr>
@@ -106,9 +158,30 @@ const CategoriesTable = () => {
                     id="editName"
                     name="name"
                     size="sm"
-                    defaultValue={form.name}
+                    value={form.name}
                     onChange={handleInputChange}
                   />
+                </Td>
+                <Td>
+                  <List spacing={2}>
+                    {eventsCtx.events.map(
+                      (event) =>
+                        event.category._id === category._id && (
+                          <ListItem key={event._id}>
+                            <ListIcon as={FaCheckCircle} color="green.500" marginBottom={0.5} />
+                            {event.title}
+                          </ListItem>
+                        )
+                    )}
+
+                    {eventsCtx.events.filter((event) => event.category._id === category._id)
+                      .length === 0 && (
+                      <ListItem>
+                        <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                        No related events
+                      </ListItem>
+                    )}
+                  </List>
                 </Td>
                 <Td>
                   <ButtonGroup>
@@ -118,10 +191,10 @@ const CategoriesTable = () => {
                       aria-label="Save"
                       icon={<FaSave />}
                       isLoading={categoriesCtx.isLoading}
-                      onClick={handleSaveClick.bind(null, 'update')}
+                      isDisabled={!form.name}
+                      onClick={handleSaveClick}
                     />
                     <IconButton
-                      colorScheme="gray"
                       size="sm"
                       aria-label="Cancel"
                       icon={<FaTimes />}
@@ -133,7 +206,23 @@ const CategoriesTable = () => {
               </Tr>
             )
           )}
-          {isAdding ? (
+
+          {!isAdding ? (
+            <Tr>
+              <Td colSpan={3}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blue"
+                  size="sm"
+                  width="full"
+                  leftIcon={<FaPlus />}
+                  isLoading={categoriesCtx.isLoading}
+                  onClick={handleAddClick}>
+                  Add
+                </Button>
+              </Td>
+            </Tr>
+          ) : (
             <Tr>
               <Td>
                 <Input
@@ -145,6 +234,14 @@ const CategoriesTable = () => {
                 />
               </Td>
               <Td>
+                <List spacing={2}>
+                  <ListItem>
+                    <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+                    No related events
+                  </ListItem>
+                </List>
+              </Td>
+              <Td>
                 <ButtonGroup>
                   <IconButton
                     colorScheme="green"
@@ -152,10 +249,10 @@ const CategoriesTable = () => {
                     aria-label="Save"
                     icon={<FaSave />}
                     isLoading={categoriesCtx.isLoading}
-                    onClick={handleSaveClick.bind(null, 'create')}
+                    isDisabled={!form.name}
+                    onClick={handleSaveClick}
                   />
                   <IconButton
-                    colorScheme="gray"
                     size="sm"
                     aria-label="Cancel"
                     icon={<FaTimes />}
@@ -163,20 +260,6 @@ const CategoriesTable = () => {
                     onClick={handleCancelClick}
                   />
                 </ButtonGroup>
-              </Td>
-            </Tr>
-          ) : (
-            <Tr>
-              <Td colSpan={2}>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  size="sm"
-                  width="full"
-                  leftIcon={<FaPlus />}
-                  onClick={handleAddClick}>
-                  Add
-                </Button>
               </Td>
             </Tr>
           )}

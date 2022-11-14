@@ -1,8 +1,11 @@
 import { useToast } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { getToken } from 'utils/storeToken';
+import { CategoryContext } from 'contexts/category';
+import { ImageContext } from 'contexts/image';
+import { TalentContext } from 'contexts/talent';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
+import { getToken } from 'utils/storeToken';
 import EventContext from './Event.context';
 
 import type { IEvent, IEventPayload } from 'types/event';
@@ -15,20 +18,11 @@ const EventProvider = ({ children }: EventProviderProps) => {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const categoriesCtx = useContext(CategoryContext);
+  const talentsCtx = useContext(TalentContext);
+  const imagesCtx = useContext(ImageContext);
   const toast = useToast();
   const token = getToken();
-
-  const fetch = useCallback(async () => {
-    setIsLoading(true);
-
-    if (token) {
-      const { data } = await getFetcher('/events', {}, token);
-
-      setEvents(data);
-    }
-
-    setIsLoading(false);
-  }, [token]);
 
   const create = async (payload: IEventPayload) => {
     setIsLoading(true);
@@ -36,7 +30,13 @@ const EventProvider = ({ children }: EventProviderProps) => {
     try {
       const { data } = await postFetcher('/events', payload, token);
 
-      fetch();
+      const category = categoriesCtx.categories.find((category) => category._id === data.category);
+      const talent = talentsCtx.talents.find((talent) => talent._id === data.talent);
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
+
+      const updatedEvents = [...events, { ...data, category, talent, image }];
+
+      setEvents(updatedEvents);
 
       toast({
         title: 'Success',
@@ -64,7 +64,19 @@ const EventProvider = ({ children }: EventProviderProps) => {
     try {
       const { data } = await putFetcher(`/events/${id}`, payload, token);
 
-      fetch();
+      const category = categoriesCtx.categories.find((category) => category._id === data.category);
+      const talent = talentsCtx.talents.find((talent) => talent._id === data.talent);
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
+
+      const updatedEvents = events.map((event) => {
+        if (event._id === id) {
+          return { ...data, category, talent, image };
+        }
+
+        return event;
+      });
+
+      setEvents(updatedEvents);
 
       toast({
         title: 'Success',
@@ -95,7 +107,15 @@ const EventProvider = ({ children }: EventProviderProps) => {
     try {
       const { data } = await putFetcher(`/events/${id}/status`, payload, token);
 
-      fetch();
+      const updatedEvents = events.map((event) => {
+        if (event._id === id) {
+          return { ...event, status: data.status };
+        }
+
+        return event;
+      });
+
+      setEvents(updatedEvents);
 
       toast({
         title: 'Success',
@@ -123,7 +143,9 @@ const EventProvider = ({ children }: EventProviderProps) => {
     try {
       const { data } = await deleteFetcher(`/events/${id}`, token);
 
-      fetch();
+      const updatedEvents = events.filter((event) => event._id !== id);
+
+      setEvents(updatedEvents);
 
       toast({
         title: 'Success',
@@ -146,8 +168,20 @@ const EventProvider = ({ children }: EventProviderProps) => {
   };
 
   useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+
+      if (token) {
+        const { data } = await getFetcher('/events', {}, token);
+
+        setEvents(data);
+      }
+
+      setIsLoading(false);
+    };
+
     fetch();
-  }, [fetch, token]);
+  }, [token]);
 
   return (
     <EventContext.Provider value={{ events, isLoading, create, update, toggle, destroy }}>

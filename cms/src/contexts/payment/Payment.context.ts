@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
-import type { IPayment } from 'types/payment';
+import type { IPayment, IPaymentPayload } from 'types/payment';
 
 interface IPaymentContext {
   payments: IPayment[];
   isLoading: boolean;
-  create: (type: string, imageId: string, imageUrl: string) => void;
-  update: (id: string, type: string, imageId: string, imageUrl: string) => void;
+  create: (payload: IPaymentPayload) => void;
+  update: (id: string, payload: IPaymentPayload) => void;
   destroy: (id: string) => void;
 }
 

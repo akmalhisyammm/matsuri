@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
-import type { ICategory } from 'types/category';
+import type { ICategory, ICategoryPayload } from 'types/category';
 
 interface ICategoryContext {
   categories: ICategory[];
   isLoading: boolean;
-  create: (name: string) => void;
-  update: (id: string, name: string) => void;
+  create: (payload: ICategoryPayload) => void;
+  update: (id: string, payload: ICategoryPayload) => void;
   destroy: (id: string) => void;
 }
 

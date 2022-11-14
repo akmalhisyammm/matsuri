@@ -1,11 +1,12 @@
 import { useToast } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
+import { ImageContext } from 'contexts/image';
 import { getToken } from 'utils/storeToken';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
 import TalentContext from './Talent.context';
 
-import type { ITalent } from 'types/talent';
+import type { ITalent, ITalentPayload } from 'types/talent';
 
 type TalentProviderProps = {
   children: React.ReactNode;
@@ -15,16 +16,21 @@ const TalentProvider = ({ children }: TalentProviderProps) => {
   const [talents, setTalents] = useState<ITalent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const imagesCtx = useContext(ImageContext);
   const toast = useToast();
   const token = getToken();
 
-  const create = async (name: string, role: string, imageId: string, imageUrl: string) => {
+  const create = async (payload: ITalentPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await postFetcher('/talents', { name, role, imageId }, token);
+      const { data } = await postFetcher('/talents', payload, token);
 
-      setTalents([...talents, { ...data, image: { _id: imageId, url: imageUrl } }]);
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
+
+      const updatedTalents = [...talents, { ...data, image }];
+
+      setTalents(updatedTalents);
 
       toast({
         title: 'Success',
@@ -46,21 +52,17 @@ const TalentProvider = ({ children }: TalentProviderProps) => {
     setIsLoading(false);
   };
 
-  const update = async (
-    id: string,
-    name: string,
-    role: string,
-    imageId: string,
-    imageUrl: string
-  ) => {
+  const update = async (id: string, payload: ITalentPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await putFetcher(`/talents/${id}`, { name, role, imageId }, token);
+      const { data } = await putFetcher(`/talents/${id}`, payload, token);
+
+      const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
 
       const updatedTalents = talents.map((talent) => {
         if (talent._id === id) {
-          return { ...data, image: { _id: imageId, url: imageUrl } };
+          return { ...data, image };
         }
 
         return talent;

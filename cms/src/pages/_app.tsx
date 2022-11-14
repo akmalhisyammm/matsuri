@@ -14,17 +14,17 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ChakraProvider theme={customTheme}>
       <AuthProvider>
-        <EventProvider>
+        <ImageProvider>
           <CategoryProvider>
             <PaymentProvider>
               <TalentProvider>
-                <ImageProvider>
+                <EventProvider>
                   <Component {...pageProps} />
-                </ImageProvider>
+                </EventProvider>
               </TalentProvider>
             </PaymentProvider>
           </CategoryProvider>
-        </EventProvider>
+        </ImageProvider>
       </AuthProvider>
     </ChakraProvider>
   );

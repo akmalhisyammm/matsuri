@@ -141,10 +141,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
   };
 
   const handleSaveClick = () => {
-    const payload = {
-      ...form,
-      imageId: imagesCtx.image?._id || '',
-    };
+    const payload = { ...form, imageId: imagesCtx.image?._id || '' };
 
     if (!data) {
       eventsCtx.create(payload);
@@ -214,7 +211,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
               type="title"
               id="title"
               name="title"
-              defaultValue={form.title}
+              value={form.title}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -225,7 +222,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
               type="datetime-local"
               id="date"
               name="date"
-              defaultValue={form.date}
+              value={form.date}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -236,7 +233,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
               type="text"
               id="venueName"
               name="venueName"
-              defaultValue={form.venueName}
+              value={form.venueName}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -247,19 +244,14 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
               type="text"
               id="tagline"
               name="tagline"
-              defaultValue={form.tagline}
+              value={form.tagline}
               onChange={handleInputChange}
             />
           </FormControl>
 
           <FormControl marginY={4}>
             <FormLabel htmlFor="about">About</FormLabel>
-            <Textarea
-              id="about"
-              name="about"
-              defaultValue={form.about}
-              onChange={handleInputChange}
-            />
+            <Textarea id="about" name="about" value={form.about} onChange={handleInputChange} />
           </FormControl>
 
           <FormControl marginY={4}>
@@ -270,7 +262,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                   type="text"
                   id={`keypoint${idx}`}
                   name={`keypoint-${idx}`}
-                  defaultValue={form.keypoint[idx]}
+                  value={form.keypoint[idx]}
                   onChange={handleInputChange}
                 />
                 <IconButton
@@ -315,7 +307,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                       type="text"
                       id={`ticketType${idx}`}
                       name={`tickets-${idx}-type`}
-                      defaultValue={form.tickets[idx].type}
+                      value={form.tickets[idx].type}
                       onChange={handleInputChange}
                     />
                   </InputGroup>
@@ -325,7 +317,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                       type="number"
                       id={`ticketPrice${idx}`}
                       name={`tickets-${idx}-price`}
-                      defaultValue={form.tickets[idx].price}
+                      value={form.tickets[idx].price}
                       onChange={handleInputChange}
                     />
                   </InputGroup>
@@ -335,7 +327,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                       type="number"
                       id={`ticketStock${idx}`}
                       name={`tickets-${idx}-stock`}
-                      defaultValue={form.tickets[idx].stock}
+                      value={form.tickets[idx].stock}
                       onChange={handleInputChange}
                     />
                   </InputGroup>

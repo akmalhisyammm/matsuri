@@ -6,3 +6,8 @@ export interface IPayment {
   status: boolean;
   image: IImage;
 }
+
+export interface IPaymentPayload {
+  type: string;
+  imageId: string;
+}

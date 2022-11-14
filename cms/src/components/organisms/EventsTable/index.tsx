@@ -67,13 +67,13 @@ const EventsTable = () => {
         <Table size="sm">
           <Thead>
             <Tr>
-              <Th>Image</Th>
-              <Th width="30%">Title</Th>
+              <Th width="20%">Image</Th>
+              <Th width="25%">Title</Th>
               <Th width="10%">Time</Th>
-              <Th width="20%">Date</Th>
-              <Th width="20%">Location</Th>
-              <Th width="20%">Status</Th>
-              <Th>Action</Th>
+              <Th width="15%">Date</Th>
+              <Th width="15%">Location</Th>
+              <Th width="15%">Status</Th>
+              <Th>Actions</Th>
             </Tr>
           </Thead>
 

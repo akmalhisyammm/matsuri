@@ -1,11 +1,11 @@
 import { useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import { getToken } from 'utils/storeToken';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
+import { getToken } from 'utils/storeToken';
 import CategoryContext from './Category.context';
 
-import type { ICategory } from 'types/category';
+import type { ICategory, ICategoryPayload } from 'types/category';
 
 type CategoryProviderProps = {
   children: React.ReactNode;
@@ -18,17 +18,19 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
   const toast = useToast();
   const token = getToken();
 
-  const create = async (name: string) => {
+  const create = async (payload: ICategoryPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await postFetcher('/categories', { name }, token);
+      const { data } = await postFetcher('/categories', payload, token);
 
-      setCategories([...categories, data]);
+      const updatedCategories = [...categories, data];
+
+      setCategories(updatedCategories);
 
       toast({
         title: 'Success',
-        description: `${data.name} has been created.`,
+        description: `Category has been created: ${data.name}`,
         status: 'success',
         duration: 3000,
       });
@@ -46,11 +48,11 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
     setIsLoading(false);
   };
 
-  const update = async (id: string, name: string) => {
+  const update = async (id: string, payload: ICategoryPayload) => {
     setIsLoading(true);
 
     try {
-      const { data } = await putFetcher(`/categories/${id}`, { name }, token);
+      const { data } = await putFetcher(`/categories/${id}`, payload, token);
 
       const updatedCategories = categories.map((category) => {
         if (category._id === id) {
@@ -64,7 +66,7 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
 
       toast({
         title: 'Success',
-        description: `${data.name} has been updated.`,
+        description: `Category has been updated: ${data.name}`,
         status: 'success',
         duration: 3000,
       });
@@ -94,7 +96,7 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
 
       toast({
         title: 'Success',
-        description: `${data.name} has been deleted.`,
+        description: `Category has been deleted: ${data.name}`,
         status: 'success',
         duration: 3000,
       });

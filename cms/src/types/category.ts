@@ -3,3 +3,7 @@ export interface ICategory {
   name: string;
   organizer: string;
 }
+
+export interface ICategoryPayload {
+  name: string;
+}
