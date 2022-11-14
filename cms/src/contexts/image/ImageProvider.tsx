@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { getToken } from 'utils/storeToken';
 import { postFetcher } from 'utils/fetcher';
-import PaymentContext from './Image.context';
+import ImageContext from './Image.context';
 
 import type { IImage } from 'types/image';
 
@@ -49,6 +49,12 @@ const ImageProvider = ({ children }: ImageProviderProps) => {
     setIsLoading(false);
   };
 
+  const set = (image: IImage | null) => {
+    setIsLoading(true);
+    setImage(image);
+    setIsLoading(false);
+  };
+
   const remove = async () => {
     setIsLoading(true);
     setImage(null);
@@ -56,9 +62,9 @@ const ImageProvider = ({ children }: ImageProviderProps) => {
   };
 
   return (
-    <PaymentContext.Provider value={{ image, isLoading, upload, remove }}>
+    <ImageContext.Provider value={{ image, isLoading, upload, set, remove }}>
       {children}
-    </PaymentContext.Provider>
+    </ImageContext.Provider>
   );
 };
 
