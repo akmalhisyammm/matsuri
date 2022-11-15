@@ -1,13 +1,28 @@
 const { StatusCodes } = require('http-status-codes');
 const {
-  getAllUsers,
+  getAllOrganizerUsers,
+  getAllAdminUsers,
   createAdminUser,
   createOrganizerUser,
+  updateOrganizerUser,
+  updateAdminUser,
+  deleteOrganizerUser,
+  deleteAdminUser,
 } = require('../../../services/mongoose/users');
 
-const index = async (req, res, next) => {
+const getOrganizers = async (req, res, next) => {
   try {
-    const result = await getAllUsers(req);
+    const result = await getAllOrganizerUsers(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getAdmins = async (req, res, next) => {
+  try {
+    const result = await getAllAdminUsers(req);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
@@ -35,4 +50,53 @@ const createAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { index, createOrganizer, createAdmin };
+const updateOrganizer = async (req, res, next) => {
+  try {
+    const result = await updateOrganizerUser(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateAdmin = async (req, res, next) => {
+  try {
+    const result = await updateAdminUser(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroyOrganizer = async (req, res, next) => {
+  try {
+    const result = await deleteOrganizerUser(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroyAdmin = async (req, res, next) => {
+  try {
+    const result = await deleteAdminUser(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getOrganizers,
+  getAdmins,
+  createOrganizer,
+  createAdmin,
+  updateOrganizer,
+  updateAdmin,
+  destroyOrganizer,
+  destroyAdmin,
+};

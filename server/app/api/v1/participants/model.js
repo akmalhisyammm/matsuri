@@ -47,6 +47,14 @@ participantSchema.pre('save', async function (next) {
   next();
 });
 
+participantSchema.pre('findOneAndUpdate', async function (next) {
+  if (this._update.password) {
+    this._update.password = await bcrypt.hash(this._update.password, 12);
+  }
+
+  next();
+});
+
 participantSchema.methods.comparePassword = async function (password) {
   const isMatch = await bcrypt.compare(password, this.password);
 
