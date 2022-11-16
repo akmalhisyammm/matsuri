@@ -80,16 +80,7 @@ const Header = () => {
                       role="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false">
-                      <Image src="/images/avatar.png" alt="Avatar" width={60} height={60} />
-                    </a>
-                    <a
-                      className="d-block d-lg-none dropdown-toggle text-light text-decoration-none"
-                      data-bs-toggle="collapse"
-                      href="#collapseExample"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="collapseExample">
-                      <Image src="/images/avatar.png" alt="Avatar" width={60} height={60} />
+                      {/* <Image src="/images/avatar.png" alt="Avatar" width={60} height={60} /> */}
                     </a>
 
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">

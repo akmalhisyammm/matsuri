@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 
 import { CustomButton } from 'components/atoms';
@@ -25,15 +26,20 @@ const TalentCard = ({
   date,
   onSubmit,
 }: TalentCardProps) => {
+  const [imageSrc, setImageSrc] = useState<string>(imageUrl);
+
   return (
     <div className="d-flex flex-column card-event">
       <h6>Talent</h6>
       <div className="d-flex align-items-center gap-3 mt-3">
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}/${imageUrl}`}
+          src={imageSrc}
           alt={name}
           width={60}
           height={60}
+          placeholder="blur"
+          blurDataURL="/images/favicon.png"
+          onError={() => setImageSrc('/images/favicon.png')}
           style={{ objectFit: 'cover', borderRadius: '50%' }}
         />
         <div>
@@ -42,13 +48,13 @@ const TalentCard = ({
         </div>
       </div>
 
-      <hr />
-
-      <h6>Get Ticket</h6>
+      {/* <h6>Get Ticket</h6> */}
       {tickets?.map(
         (ticket: IEventTicket) =>
           ticket.status && (
             <div key={ticket._id}>
+              <hr />
+              <h6>{ticket.type} Ticket</h6>
               <div className="price my-3">
                 {ticket.price === 0 ? 'Free' : `$${ticket.price}`}
                 <span>/person</span>

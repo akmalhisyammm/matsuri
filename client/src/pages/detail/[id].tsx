@@ -12,7 +12,7 @@ const Detail = () => {
     <Layout>
       <BannerDetail eventId={id as string} />
       <EventDetail eventId={id as string} />
-      <EventList title="Similar Events" subtitle="Next One" />
+      <EventList title="Similar Events" subtitle="Next One" hiddenEventId={id as string} />
       <Story />
       <StatisticList />
     </Layout>

@@ -7,7 +7,6 @@ import moment from 'moment';
 import { CustomButton } from 'components/atoms';
 import { KeypointItem, TalentCard } from 'components/molecules';
 import { useEventDetail } from 'hooks/events';
-import { formatDate } from 'utils/formatDate';
 import { getToken } from 'utils/storeToken';
 
 import type { IEventDetailSWR } from 'types/event';
@@ -47,11 +46,11 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
       <section className="details-content container" style={{ marginTop: -160 }}>
         {!isError ? (
           <div className="d-flex flex-wrap justify-content-lg-center gap">
-            <div className="d-flex flex-column description">
+            <div className="d-flex flex-column description w-100">
               {!isLoading ? (
                 <div className="headline">{data?.title}</div>
               ) : (
-                <Skeleton count={8} width={600} />
+                <Skeleton count={3} width="100%" />
               )}
 
               <div className="event-details">
@@ -59,7 +58,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 {!isLoading ? (
                   <p className="details-paragraph">{data?.about}</p>
                 ) : (
-                  <Skeleton count={10} width={600} />
+                  <Skeleton count={10} width="100%" />
                 )}
               </div>
 
@@ -69,7 +68,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                     <KeypointItem key={idx} iconUrl="/icons/ic-check.svg" description={keypoint} />
                   ))
                 ) : (
-                  <Skeleton count={10} width={600} />
+                  <Skeleton count={10} width="100%" />
                 )}
               </div>
 
@@ -94,7 +93,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                     </div>
                   </div>
                 ) : (
-                  <Skeleton width={450} height={300} borderRadius={20} />
+                  <Skeleton width="100%" height={300} borderRadius={20} />
                 )}
               </div>
             </div>
@@ -104,14 +103,16 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 name={data?.talent.name}
                 occupation={data?.talent.role}
                 tickets={data?.tickets}
-                imageUrl={data?.talent.image.url}
+                imageUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data?.talent.image.url}`}
                 location={data?.venueName}
-                time={moment(data?.date).format('HH:MM A')}
-                date={formatDate(data?.date)}
+                time={moment(data?.date.split('.')[0]).format('hh:mm A')}
+                date={moment(data?.date.split('.')[0]).format('LL')}
                 onSubmit={handleTicketSubmit}
               />
             ) : (
-              <Skeleton width={350} height={500} borderRadius={20} />
+              <div className="w-100" style={{ maxWidth: 350 }}>
+                <Skeleton width="100%" height={500} borderRadius={20} />
+              </div>
             )}
           </div>
         ) : (
