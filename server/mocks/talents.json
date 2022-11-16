@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "6374751e57db60c6312dd7c0",
+    "name": "Sasuke Uchiha",
+    "role": "Shadow Hokage",
+    "image": "63749d6f57db60c6312dd7da",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374751e57db60c6312dd7c1",
+    "name": "Shikamaru Nara",
+    "role": "Assistant Hokage",
+    "image": "63749d6f57db60c6312dd7db",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374751e57db60c6312dd7c2",
+    "name": "Kankuro",
+    "role": "Head of Counter-Terrorism Division",
+    "image": "63749d6f57db60c6312dd7dc",
+    "organizer": "63746bca57db60c6312dd7b2"
+  },
+  {
+    "_id": "6374751e57db60c6312dd7c3",
+    "name": "Killer Bee",
+    "role": "Jinchuriki of the Eight-Tails",
+    "image": "63749d6f57db60c6312dd7dd",
+    "organizer": "63746bca57db60c6312dd7b3"
+  },
+  {
+    "_id": "6374751e57db60c6312dd7c4",
+    "name": "Omoi",
+    "role": "Assistant Raikage",
+    "image": "63749d6f57db60c6312dd7de",
+    "organizer": "63746bca57db60c6312dd7b3"
+  }
+]

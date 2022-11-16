@@ -1,0 +1,32 @@
+[
+  {
+    "_id": "6374709f57db60c6312dd7b0",
+    "name": "Festival",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374709f57db60c6312dd7b1",
+    "name": "Music",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374709f57db60c6312dd7b2",
+    "name": "Workshop",
+    "organizer": "63746bca57db60c6312dd7b2"
+  },
+  {
+    "_id": "6374709f57db60c6312dd7b3",
+    "name": "Concert",
+    "organizer": "63746bca57db60c6312dd7b3"
+  },
+  {
+    "_id": "6374709f57db60c6312dd7b4",
+    "name": "Entertainment",
+    "organizer": "63746bca57db60c6312dd7b4"
+  },
+  {
+    "_id": "6374709f57db60c6312dd7b5",
+    "name": "Sport",
+    "organizer": "63746bca57db60c6312dd7b5"
+  }
+]

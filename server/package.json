@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
+    "migrate": "node mocks/migrate --delete && node mocks/migrate --import",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

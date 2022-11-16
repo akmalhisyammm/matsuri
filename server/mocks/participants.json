@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "6374e6d257db60c6312dd820",
+    "firstName": "Boruto",
+    "lastName": "Uzumaki",
+    "role": "Shinobi",
+    "email": "boruto.uzumaki@gmail.com",
+    "password": "shinobi123",
+    "otp": "4628",
+    "status": "Active"
+  }
+]

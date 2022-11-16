@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "6374756957db60c6312dd7c0",
+    "name": "Mifune",
+    "email": "mifune@gmail.com",
+    "password": "shinobi123",
+    "role": "Owner",
+    "organizer": "63746bca57db60c6312dd7b0"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c1",
+    "name": "Naruto Uzumaki",
+    "email": "naruto.uzumaki@gmail.com",
+    "password": "shinobi123",
+    "role": "Organizer",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c2",
+    "name": "Konohamaru Sarutobi",
+    "email": "konohamaru.sarutobi@gmail.com",
+    "password": "shinobi123",
+    "role": "Admin",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c3",
+    "name": "Gaara",
+    "email": "gaara@gmail.com",
+    "password": "shinobi123",
+    "role": "Organizer",
+    "organizer": "63746bca57db60c6312dd7b2"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c4",
+    "name": "Darui",
+    "email": "darui@gmail.com",
+    "password": "shinobi123",
+    "role": "Organizer",
+    "organizer": "63746bca57db60c6312dd7b3"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c5",
+    "name": "Kurotsuchi",
+    "email": "kurotsuchi@gmail.com",
+    "password": "shinobi123",
+    "role": "Organizer",
+    "organizer": "63746bca57db60c6312dd7b4"
+  },
+  {
+    "_id": "6374756957db60c6312dd7c6",
+    "name": "Chojuro",
+    "email": "chojuro@gmail.com",
+    "password": "shinobi123",
+    "role": "Organizer",
+    "organizer": "63746bca57db60c6312dd7b5"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "6374725257db60c6312dd7ba",
+    "type": "BCA",
+    "image": "63749d6f57db60c6312dd7df",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374725257db60c6312dd7bb",
+    "type": "BNI",
+    "image": "6374e2e857db60c6312dd7f0",
+    "organizer": "63746bca57db60c6312dd7b1"
+  },
+  {
+    "_id": "6374725257db60c6312dd7bc",
+    "type": "BCA",
+    "image": "63749d6f57db60c6312dd7df",
+    "organizer": "63746bca57db60c6312dd7b2"
+  },
+  {
+    "_id": "6374725257db60c6312dd7bd",
+    "type": "Mandiri",
+    "image": "6374e2e857db60c6312dd7f1",
+    "organizer": "63746bca57db60c6312dd7b2"
+  },
+  {
+    "_id": "6374725257db60c6312dd7be",
+    "type": "BRI",
+    "image": "6374e2e857db60c6312dd7f2",
+    "organizer": "63746bca57db60c6312dd7b3"
+  },
+  {
+    "_id": "6374725257db60c6312dd7bf",
+    "type": "Mandiri",
+    "image": "6374e2e857db60c6312dd7f1",
+    "organizer": "63746bca57db60c6312dd7b4"
+  },
+  {
+    "_id": "6374e49b57db60c6312dd7f0",
+    "type": "BRI",
+    "image": "6374e2e857db60c6312dd7f2",
+    "organizer": "63746bca57db60c6312dd7b5"
+  }
+]
