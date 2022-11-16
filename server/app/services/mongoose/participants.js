@@ -160,12 +160,11 @@ const checkoutOrder = async (req) => {
 
   const eventHistory = {
     title: event.title,
-    date: event.date,
-    about: event.about,
     tagline: event.tagline,
-    keypoint: event.keypoint,
+    about: event.about,
+    date: event.date,
     venueName: event.venueName,
-    tickets,
+    keypoint: event.keypoint,
     image: event.image,
     category: event.category,
     talent: event.talent,
@@ -174,14 +173,14 @@ const checkoutOrder = async (req) => {
 
   const result = new Orders({
     date: new Date(),
-    personalDetail,
     totalPay,
     totalOrderTicket,
+    personalDetail,
     orderItems: tickets,
     participant: id,
+    payment,
     event,
     eventHistory,
-    payment,
   });
 
   await result.save();
