@@ -15,7 +15,7 @@ const Header = () => {
       paddingX={8}
       paddingY={4}
       borderBottomWidth={1}
-      backgroundColor={colorMode === 'light' ? 'gray.100' : 'gray.900'}>
+      backgroundColor={colorMode === 'light' ? 'gray.50' : 'gray.900'}>
       <Flex gap={2} justifyContent="flex-end">
         <Button
           variant="outline"

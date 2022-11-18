@@ -1,6 +1,8 @@
 import { useToast } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 
+import { TALENTS } from 'constants/access';
+import { AuthContext } from 'contexts/auth';
 import { ImageContext } from 'contexts/image';
 import { getToken } from 'utils/storeToken';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
@@ -14,16 +16,20 @@ type TalentProviderProps = {
 
 const TalentProvider = ({ children }: TalentProviderProps) => {
   const [talents, setTalents] = useState<ITalent[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authorizedAccess, setAuthorizedAccess] = useState<
+    ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]
+  >([]);
 
+  const authCtx = useContext(AuthContext);
   const imagesCtx = useContext(ImageContext);
   const toast = useToast();
   const token = getToken();
 
   const create = async (payload: ITalentPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await postFetcher('/talents', payload, token);
 
       const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
@@ -47,15 +53,15 @@ const TalentProvider = ({ children }: TalentProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const update = async (id: string, payload: ITalentPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await putFetcher(`/talents/${id}`, payload, token);
 
       const image = { _id: imagesCtx.image?._id, url: imagesCtx.image?.url };
@@ -85,15 +91,15 @@ const TalentProvider = ({ children }: TalentProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const destroy = async (id: string) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await deleteFetcher(`/talents/${id}`, token);
 
       const updatedTalents = talents.filter((talent) => talent._id !== id);
@@ -115,29 +121,48 @@ const TalentProvider = ({ children }: TalentProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
     const fetch = async () => {
-      setIsLoading(true);
-
       if (token) {
-        const { data } = await getFetcher('/talents', {}, token);
+        try {
+          setIsLoading(true);
 
-        setTalents(data);
+          const { data } = await getFetcher('/talents', {}, token);
+
+          setTalents(data);
+        } catch (err) {
+          if (err instanceof Error) {
+            return err.message;
+          }
+        } finally {
+          setIsLoading(false);
+        }
       }
 
       setIsLoading(false);
     };
 
     fetch();
-  }, [token]);
+  }, [token, toast]);
+
+  useEffect(() => {
+    if (authCtx.user) {
+      const access = (Object.keys(TALENTS) as ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]).filter(
+        (key) => TALENTS[key as keyof typeof TALENTS].includes(authCtx.user?.role as string)
+      );
+
+      setAuthorizedAccess(access);
+    }
+  }, [authCtx.user]);
 
   return (
-    <TalentContext.Provider value={{ talents, isLoading, create, update, destroy }}>
+    <TalentContext.Provider
+      value={{ talents, isLoading, authorizedAccess, create, update, destroy }}>
       {children}
     </TalentContext.Provider>
   );

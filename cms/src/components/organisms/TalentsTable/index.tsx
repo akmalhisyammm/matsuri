@@ -37,7 +37,7 @@ import type { ITalent, ITalentPayload } from 'types/talent';
 const TalentsTable = () => {
   const [form, setForm] = useState<ITalentPayload>({ name: '', role: '', imageId: '' });
   const [editedTalent, setEditedTalent] = useState<ITalent>();
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -110,6 +110,17 @@ const TalentsTable = () => {
     imagesCtx.remove();
   };
 
+  if (!talentsCtx.authorizedAccess.includes('READ')) {
+    return (
+      <List spacing={3}>
+        <ListItem>
+          <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+          You don&apos;t have access to read talents
+        </ListItem>
+      </List>
+    );
+  }
+
   return (
     <TableContainer>
       <Table size="sm">
@@ -159,34 +170,38 @@ const TalentsTable = () => {
                 </Td>
                 <Td>
                   <ButtonGroup>
-                    <IconButton
-                      colorScheme="yellow"
-                      size="sm"
-                      aria-label="Edit"
-                      icon={<FaEdit />}
-                      isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
-                      onClick={handleEditClick.bind(null, talent)}
-                    />
-                    <Tooltip
-                      label="Unable to delete talent with related events"
-                      placement="bottom-start"
-                      isDisabled={
-                        eventsCtx.events.filter((event) => event.talent._id === talent._id)
-                          .length === 0
-                      }
-                      hasArrow>
+                    {talentsCtx.authorizedAccess.includes('UPDATE') && (
                       <IconButton
-                        colorScheme="red"
+                        colorScheme="yellow"
                         size="sm"
-                        aria-label="Delete"
-                        icon={<FaTrash />}
+                        aria-label="Edit"
+                        icon={<FaEdit />}
                         isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
-                        isDisabled={eventsCtx.events.some(
-                          (event) => event.talent._id === talent._id
-                        )}
-                        onClick={handleDeleteClick.bind(null, talent._id)}
+                        onClick={handleEditClick.bind(null, talent)}
                       />
-                    </Tooltip>
+                    )}
+                    {talentsCtx.authorizedAccess.includes('DELETE') && (
+                      <Tooltip
+                        label="Unable to delete talent with related events"
+                        placement="bottom-start"
+                        isDisabled={
+                          eventsCtx.events.filter((event) => event.talent._id === talent._id)
+                            .length === 0
+                        }
+                        hasArrow>
+                        <IconButton
+                          colorScheme="red"
+                          size="sm"
+                          aria-label="Delete"
+                          icon={<FaTrash />}
+                          isLoading={imagesCtx.isLoading || talentsCtx.isLoading}
+                          isDisabled={eventsCtx.events.some(
+                            (event) => event.talent._id === talent._id
+                          )}
+                          onClick={handleDeleteClick.bind(null, talent._id)}
+                        />
+                      </Tooltip>
+                    )}
                   </ButtonGroup>
                 </Td>
               </Tr>
@@ -291,7 +306,7 @@ const TalentsTable = () => {
             )
           )}
 
-          {!isAdding ? (
+          {talentsCtx.authorizedAccess.includes('CREATE') && !isAdding ? (
             <Tr>
               <Td colSpan={5}>
                 <Button

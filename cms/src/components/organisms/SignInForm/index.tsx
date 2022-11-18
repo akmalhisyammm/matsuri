@@ -1,10 +1,27 @@
-import { Box, Button, FormControl, FormLabel, Input, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Image,
+  useColorMode,
+  InputGroup,
+  IconButton,
+  InputRightElement,
+} from '@chakra-ui/react';
 import { useContext, useState } from 'react';
+import { FaEyeSlash, FaEye } from 'react-icons/fa';
 
 import { AuthContext } from 'contexts/auth';
 
+import type { IUserPayload } from 'types/user';
+
 const SignInForm = () => {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState<IUserPayload>({ email: '', password: '' });
+  const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
+
+  const { colorMode } = useColorMode();
 
   const authCtx = useContext(AuthContext);
 
@@ -21,17 +38,45 @@ const SignInForm = () => {
   };
 
   return (
-    <Box paddingX={12} paddingY={8} borderWidth={1} borderRadius={18} backgroundColor="gray.900">
+    <Box
+      paddingX={10}
+      paddingY={8}
+      borderWidth={1}
+      borderRadius={18}
+      backgroundColor={colorMode === 'light' ? 'gray.50' : 'gray.900'}>
       <Image src="/images/logo.png" alt="Matsuri" width={150} marginX="auto" marginBottom={4} />
 
       <form onSubmit={handleFormSubmit}>
         <FormControl marginY={4}>
           <FormLabel htmlFor="email">Email</FormLabel>
-          <Input type="email" id="email" name="email" onChange={handleInputChange} />
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            value={form.email}
+            onChange={handleInputChange}
+          />
         </FormControl>
         <FormControl marginY={4}>
           <FormLabel htmlFor="password">Password</FormLabel>
-          <Input type="password" id="password" name="password" onChange={handleInputChange} />
+          <InputGroup>
+            <Input
+              type={isShowPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              value={form.password}
+              onChange={handleInputChange}
+            />
+            <InputRightElement>
+              <IconButton
+                variant="ghost"
+                size="sm"
+                aria-label={isShowPassword ? 'Hide' : 'Show'}
+                icon={isShowPassword ? <FaEyeSlash /> : <FaEye />}
+                onClick={() => setIsShowPassword(!isShowPassword)}
+              />
+            </InputRightElement>
+          </InputGroup>
         </FormControl>
         <Button
           type="submit"

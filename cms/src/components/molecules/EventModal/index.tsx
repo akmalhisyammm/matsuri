@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Divider,
@@ -19,7 +20,6 @@ import {
   ModalOverlay,
   Select,
   Switch,
-  Text,
   Textarea,
 } from '@chakra-ui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -53,7 +53,6 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
     talentId: '',
     imageId: '',
   });
-  const [currentEvent, setCurrentEvent] = useState<IEvent | null>(null);
 
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -150,19 +149,16 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
     }
 
     handleResetForm();
-    setCurrentEvent(null);
     onClose();
   };
 
   const handleCancelClick = () => {
     handleResetForm();
-    setCurrentEvent(null);
     onClose();
   };
 
   useEffect(() => {
     if (data) {
-      setCurrentEvent(data);
       setForm({
         title: data.title,
         date: moment(data.date.split('.')[0]).format('YYYY-MM-DDTHH:mm'),
@@ -191,24 +187,25 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
       <ModalOverlay />
 
       <ModalContent>
-        <ModalHeader borderBottomWidth={1}>{!currentEvent ? 'Add' : 'Edit'} Event</ModalHeader>
+        <ModalHeader borderBottomWidth={1}>{!data ? 'Add' : 'Edit'} Event</ModalHeader>
         <ModalBody>
-          <HStack gap={2} justifyContent="center" alignItems="center">
-            <Text color={form.status === 'Draft' ? 'red.200' : ''}>Draft</Text>
+          <HStack gap={2} paddingY={2} justifyContent="center" alignItems="center">
+            <Badge colorScheme={form.status === 'Draft' ? 'red' : 'gray'}>Draft</Badge>
             <Switch
               id="status"
               name="status"
               isChecked={form.status === 'Published'}
               onChange={handleInputChange}
             />
-            <Text color={form.status === 'Published' ? 'green.200' : ''}>Published</Text>
+            <Badge colorScheme={form.status === 'Published' ? 'green' : 'gray'}>Published</Badge>
           </HStack>
+
           <Divider my={2} />
 
           <FormControl marginY={4}>
             <FormLabel htmlFor="title">Title</FormLabel>
             <Input
-              type="title"
+              type="text"
               id="title"
               name="title"
               value={form.title}
@@ -291,14 +288,14 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
               <Flex key={idx} gap={2} marginBottom={2}>
                 <Box borderWidth={1} padding={4} width="full">
                   <HStack gap={2} justifyContent="center" alignItems="center">
-                    <Text color={!form.tickets[idx].status ? 'red.200' : ''}>Inactive</Text>
+                    <Badge colorScheme={!form.tickets[idx].status ? 'red' : 'gray'}>Inactive</Badge>
                     <Switch
                       id={`ticketStatus${idx}`}
                       name={`tickets-${idx}-status`}
                       isChecked={form.tickets[idx].status}
                       onChange={handleInputChange}
                     />
-                    <Text color={form.tickets[idx].status ? 'green.200' : ''}>Active</Text>
+                    <Badge colorScheme={form.tickets[idx].status ? 'green' : 'gray'}>Active</Badge>
                   </HStack>
                   <Divider my={2} />
                   <InputGroup marginBottom={2}>

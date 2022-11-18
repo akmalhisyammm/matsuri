@@ -1,6 +1,8 @@
 import { useToast } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
+import { CATEGORIES } from 'constants/access';
+import { AuthContext } from 'contexts/auth';
 import { deleteFetcher, getFetcher, postFetcher, putFetcher } from 'utils/fetcher';
 import { getToken } from 'utils/storeToken';
 import CategoryContext from './Category.context';
@@ -13,15 +15,19 @@ type CategoryProviderProps = {
 
 const CategoryProvider = ({ children }: CategoryProviderProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authorizedAccess, setAuthorizedAccess] = useState<
+    ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]
+  >([]);
 
+  const authCtx = useContext(AuthContext);
   const toast = useToast();
   const token = getToken();
 
   const create = async (payload: ICategoryPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await postFetcher('/categories', payload, token);
 
       const updatedCategories = [...categories, data];
@@ -43,15 +49,15 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const update = async (id: string, payload: ICategoryPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await putFetcher(`/categories/${id}`, payload, token);
 
       const updatedCategories = categories.map((category) => {
@@ -79,15 +85,15 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const destroy = async (id: string) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await deleteFetcher(`/categories/${id}`, token);
 
       const updatedCategories = categories.filter((category) => category._id !== id);
@@ -109,29 +115,48 @@ const CategoryProvider = ({ children }: CategoryProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
     const fetch = async () => {
-      setIsLoading(true);
-
       if (token) {
-        const { data } = await getFetcher('/categories', {}, token);
+        try {
+          setIsLoading(true);
 
-        setCategories(data);
+          const { data } = await getFetcher('/categories', {}, token);
+
+          setCategories(data);
+        } catch (err) {
+          if (err instanceof Error) {
+            return err.message;
+          }
+        } finally {
+          setIsLoading(false);
+        }
       }
-
-      setIsLoading(false);
     };
 
     fetch();
-  }, [token]);
+  }, [token, toast]);
+
+  useEffect(() => {
+    if (authCtx.user) {
+      const access = (
+        Object.keys(CATEGORIES) as ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]
+      ).filter((key) =>
+        CATEGORIES[key as keyof typeof CATEGORIES].includes(authCtx.user?.role as string)
+      );
+
+      setAuthorizedAccess(access);
+    }
+  }, [authCtx.user]);
 
   return (
-    <CategoryContext.Provider value={{ categories, isLoading, create, update, destroy }}>
+    <CategoryContext.Provider
+      value={{ categories, isLoading, authorizedAccess, create, update, destroy }}>
       {children}
     </CategoryContext.Provider>
   );

@@ -1,22 +1,25 @@
 import {
+  Badge,
   Button,
   ButtonGroup,
   HStack,
   IconButton,
   Image,
+  List,
+  ListIcon,
+  ListItem,
   Switch,
   Table,
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTimesCircle, FaTrash } from 'react-icons/fa';
 import moment from 'moment';
 
 import { EventModal } from 'components/molecules';
@@ -26,7 +29,7 @@ import { ImageContext } from 'contexts/image';
 import type { IEvent } from 'types/event';
 
 const EventsTable = () => {
-  const [event, setEvent] = useState<IEvent>();
+  const [editedEvent, setEditedEvent] = useState<IEvent>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -46,7 +49,7 @@ const EventsTable = () => {
   const handleEditClick = (event: IEvent) => {
     imagesCtx.set(event.image);
 
-    setEvent(event);
+    setEditedEvent(event);
     onOpen();
   };
 
@@ -57,9 +60,20 @@ const EventsTable = () => {
   const handleModalClose = () => {
     imagesCtx.remove();
 
-    setEvent(undefined);
+    setEditedEvent(undefined);
     onClose();
   };
+
+  if (!eventsCtx.authorizedAccess.includes('READ')) {
+    return (
+      <List spacing={3}>
+        <ListItem>
+          <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+          You don&apos;t have access to read events
+        </ListItem>
+      </List>
+    );
+  }
 
   return (
     <>
@@ -100,35 +114,39 @@ const EventsTable = () => {
                       isDisabled={imagesCtx.isLoading || eventsCtx.isLoading}
                       onChange={handleToggleClick.bind(null, event._id)}
                     />
-                    <Text color={event.status === 'Published' ? 'green.200' : 'red.200'}>
+                    <Badge colorScheme={event.status === 'Published' ? 'green' : 'red'}>
                       {event.status}
-                    </Text>
+                    </Badge>
                   </HStack>
                 </Td>
                 <Td>
                   <ButtonGroup>
-                    <IconButton
-                      colorScheme="yellow"
-                      size="sm"
-                      aria-label="Edit"
-                      icon={<FaEdit />}
-                      isLoading={imagesCtx.isLoading || eventsCtx.isLoading}
-                      onClick={handleEditClick.bind(null, event)}
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      size="sm"
-                      aria-label="Delete"
-                      icon={<FaTrash />}
-                      isLoading={imagesCtx.isLoading || eventsCtx.isLoading}
-                      onClick={handleDeleteClick.bind(null, event._id)}
-                    />
+                    {eventsCtx.authorizedAccess.includes('UPDATE') && (
+                      <IconButton
+                        colorScheme="yellow"
+                        size="sm"
+                        aria-label="Edit"
+                        icon={<FaEdit />}
+                        isLoading={imagesCtx.isLoading || eventsCtx.isLoading}
+                        onClick={handleEditClick.bind(null, event)}
+                      />
+                    )}
+                    {eventsCtx.authorizedAccess.includes('DELETE') && (
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        aria-label="Delete"
+                        icon={<FaTrash />}
+                        isLoading={imagesCtx.isLoading || eventsCtx.isLoading}
+                        onClick={handleDeleteClick.bind(null, event._id)}
+                      />
+                    )}
                   </ButtonGroup>
                 </Td>
               </Tr>
             ))}
 
-            {!isOpen && (
+            {eventsCtx.authorizedAccess.includes('CREATE') && !isOpen && (
               <Tr>
                 <Td colSpan={7}>
                   <Button
@@ -148,7 +166,7 @@ const EventsTable = () => {
         </Table>
       </TableContainer>
 
-      <EventModal data={event} isOpen={isOpen} onClose={handleModalClose} />
+      <EventModal data={editedEvent} isOpen={isOpen} onClose={handleModalClose} />
     </>
   );
 };

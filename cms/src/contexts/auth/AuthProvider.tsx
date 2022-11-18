@@ -15,17 +15,17 @@ type AuthProviderProps = {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUser | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const router = useRouter();
   const toast = useToast();
   const token = getToken();
 
   const signIn = async (email: string, password: string) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await postFetcher('/auth/sign-in', { email, password });
 
       setToken(data.token);
@@ -48,9 +48,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const signOut = () => {
@@ -76,6 +76,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       const payload: IJWTPayload = jwtDecode(token);
 
       setUser({
+        _id: payload.id,
         name: payload.name,
         email: payload.email,
         role: payload.role,

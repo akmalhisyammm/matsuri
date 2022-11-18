@@ -4,6 +4,9 @@ import {
   IconButton,
   Image,
   Input,
+  List,
+  ListIcon,
+  ListItem,
   Table,
   TableContainer,
   Tbody,
@@ -13,7 +16,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useContext, useRef, useState } from 'react';
-import { FaEdit, FaPlus, FaSave, FaTimes, FaTrash, FaUpload } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaSave, FaTimes, FaTimesCircle, FaTrash, FaUpload } from 'react-icons/fa';
 
 import { PaymentContext } from 'contexts/payment';
 import { ImageContext } from 'contexts/image';
@@ -23,7 +26,7 @@ import type { IPayment, IPaymentPayload } from 'types/payment';
 const PaymentsTable = () => {
   const [form, setForm] = useState<IPaymentPayload>({ type: '', imageId: '' });
   const [editedPayment, setEditedPayment] = useState<IPayment>();
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -94,6 +97,17 @@ const PaymentsTable = () => {
     imagesCtx.remove();
   };
 
+  if (!paymentsCtx.authorizedAccess.includes('READ')) {
+    return (
+      <List spacing={3}>
+        <ListItem>
+          <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+          You don&apos;t have access to read payments
+        </ListItem>
+      </List>
+    );
+  }
+
   return (
     <TableContainer>
       <Table size="sm">
@@ -119,22 +133,26 @@ const PaymentsTable = () => {
                 <Td>{payment.type}</Td>
                 <Td>
                   <ButtonGroup>
-                    <IconButton
-                      colorScheme="yellow"
-                      size="sm"
-                      aria-label="Edit"
-                      icon={<FaEdit />}
-                      isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
-                      onClick={handleEditClick.bind(null, payment)}
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      size="sm"
-                      aria-label="Delete"
-                      icon={<FaTrash />}
-                      isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
-                      onClick={handleDeleteClick.bind(null, payment._id)}
-                    />
+                    {paymentsCtx.authorizedAccess.includes('UPDATE') && (
+                      <IconButton
+                        colorScheme="yellow"
+                        size="sm"
+                        aria-label="Edit"
+                        icon={<FaEdit />}
+                        isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
+                        onClick={handleEditClick.bind(null, payment)}
+                      />
+                    )}
+                    {paymentsCtx.authorizedAccess.includes('DELETE') && (
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        aria-label="Delete"
+                        icon={<FaTrash />}
+                        isLoading={imagesCtx.isLoading || paymentsCtx.isLoading}
+                        onClick={handleDeleteClick.bind(null, payment._id)}
+                      />
+                    )}
                   </ButtonGroup>
                 </Td>
               </Tr>
@@ -208,7 +226,7 @@ const PaymentsTable = () => {
             )
           )}
 
-          {!isAdding ? (
+          {paymentsCtx.authorizedAccess.includes('CREATE') && !isAdding ? (
             <Tr>
               <Td colSpan={3}>
                 <Button

@@ -19,12 +19,12 @@ const ImageProvider = ({ children }: ImageProviderProps) => {
   const token = getToken();
 
   const upload = async (image: File) => {
-    setIsLoading(true);
-
     const formData = new FormData();
     formData.append('image', image);
 
     try {
+      setIsLoading(true);
+
       const { data } = await postFetcher('/images', formData, token);
 
       setImage(data);
@@ -44,9 +44,9 @@ const ImageProvider = ({ children }: ImageProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const set = (image: IImage | null) => {

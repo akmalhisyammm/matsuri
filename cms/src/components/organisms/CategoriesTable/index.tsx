@@ -34,7 +34,7 @@ import type { ICategory, ICategoryPayload } from 'types/category';
 const CategoriesTable = () => {
   const [form, setForm] = useState<ICategoryPayload>({ name: '' });
   const [editedCategory, setEditedCategory] = useState<ICategory>();
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
   const categoriesCtx = useContext(CategoryContext);
   const eventsCtx = useContext(EventContext);
@@ -80,6 +80,17 @@ const CategoriesTable = () => {
     categoriesCtx.destroy(id);
   };
 
+  if (!categoriesCtx.authorizedAccess.includes('READ')) {
+    return (
+      <List spacing={3}>
+        <ListItem>
+          <ListIcon as={FaTimesCircle} color="red.500" marginBottom={0.5} />
+          You don&apos;t have access to read categories
+        </ListItem>
+      </List>
+    );
+  }
+
   return (
     <TableContainer>
       <Table size="sm">
@@ -119,34 +130,38 @@ const CategoriesTable = () => {
                 </Td>
                 <Td>
                   <ButtonGroup>
-                    <IconButton
-                      colorScheme="yellow"
-                      size="sm"
-                      aria-label="Edit"
-                      icon={<FaEdit />}
-                      isLoading={categoriesCtx.isLoading}
-                      onClick={handleEditClick.bind(null, category)}
-                    />
-                    <Tooltip
-                      label="Unable to delete category with related events"
-                      placement="bottom-start"
-                      isDisabled={
-                        eventsCtx.events.filter((event) => event.category._id === category._id)
-                          .length === 0
-                      }
-                      hasArrow>
+                    {categoriesCtx.authorizedAccess.includes('UPDATE') && (
                       <IconButton
-                        colorScheme="red"
+                        colorScheme="yellow"
                         size="sm"
-                        aria-label="Delete"
-                        icon={<FaTrash />}
+                        aria-label="Edit"
+                        icon={<FaEdit />}
                         isLoading={categoriesCtx.isLoading}
-                        isDisabled={eventsCtx.events.some(
-                          (event) => event.category._id === category._id
-                        )}
-                        onClick={handleDeleteClick.bind(null, category._id)}
+                        onClick={handleEditClick.bind(null, category)}
                       />
-                    </Tooltip>
+                    )}
+                    {categoriesCtx.authorizedAccess.includes('DELETE') && (
+                      <Tooltip
+                        label="Unable to delete category with related events"
+                        placement="bottom-start"
+                        isDisabled={
+                          eventsCtx.events.filter((event) => event.category._id === category._id)
+                            .length === 0
+                        }
+                        hasArrow>
+                        <IconButton
+                          colorScheme="red"
+                          size="sm"
+                          aria-label="Delete"
+                          icon={<FaTrash />}
+                          isLoading={categoriesCtx.isLoading}
+                          isDisabled={eventsCtx.events.some(
+                            (event) => event.category._id === category._id
+                          )}
+                          onClick={handleDeleteClick.bind(null, category._id)}
+                        />
+                      </Tooltip>
+                    )}
                   </ButtonGroup>
                 </Td>
               </Tr>
@@ -207,7 +222,7 @@ const CategoriesTable = () => {
             )
           )}
 
-          {!isAdding ? (
+          {categoriesCtx.authorizedAccess.includes('CREATE') && !isAdding ? (
             <Tr>
               <Td colSpan={3}>
                 <Button

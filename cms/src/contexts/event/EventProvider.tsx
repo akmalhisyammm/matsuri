@@ -1,6 +1,8 @@
 import { useToast } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 
+import { EVENTS } from 'constants/access';
+import { AuthContext } from 'contexts/auth';
 import { CategoryContext } from 'contexts/category';
 import { ImageContext } from 'contexts/image';
 import { TalentContext } from 'contexts/talent';
@@ -16,8 +18,12 @@ type EventProviderProps = {
 
 const EventProvider = ({ children }: EventProviderProps) => {
   const [events, setEvents] = useState<IEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authorizedAccess, setAuthorizedAccess] = useState<
+    ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]
+  >([]);
 
+  const authCtx = useContext(AuthContext);
   const categoriesCtx = useContext(CategoryContext);
   const talentsCtx = useContext(TalentContext);
   const imagesCtx = useContext(ImageContext);
@@ -25,9 +31,9 @@ const EventProvider = ({ children }: EventProviderProps) => {
   const token = getToken();
 
   const create = async (payload: IEventPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await postFetcher('/events', payload, token);
 
       const category = categoriesCtx.categories.find((category) => category._id === data.category);
@@ -53,15 +59,15 @@ const EventProvider = ({ children }: EventProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const update = async (id: string, payload: IEventPayload) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await putFetcher(`/events/${id}`, payload, token);
 
       const category = categoriesCtx.categories.find((category) => category._id === data.category);
@@ -93,9 +99,9 @@ const EventProvider = ({ children }: EventProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const toggle = async (id: string) => {
@@ -132,15 +138,15 @@ const EventProvider = ({ children }: EventProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const destroy = async (id: string) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
+
       const { data } = await deleteFetcher(`/events/${id}`, token);
 
       const updatedEvents = events.filter((event) => event._id !== id);
@@ -162,29 +168,48 @@ const EventProvider = ({ children }: EventProviderProps) => {
           duration: 3000,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
     const fetch = async () => {
-      setIsLoading(true);
-
       if (token) {
-        const { data } = await getFetcher('/events', {}, token);
+        try {
+          setIsLoading(true);
 
-        setEvents(data);
+          const { data } = await getFetcher('/events', {}, token);
+
+          setEvents(data);
+        } catch (err) {
+          if (err instanceof Error) {
+            return err.message;
+          }
+        } finally {
+          setIsLoading(false);
+        }
       }
 
       setIsLoading(false);
     };
 
     fetch();
-  }, [token]);
+  }, [token, toast]);
+
+  useEffect(() => {
+    if (authCtx.user) {
+      const access = (Object.keys(EVENTS) as ('READ' | 'CREATE' | 'UPDATE' | 'DELETE')[]).filter(
+        (key) => EVENTS[key as keyof typeof EVENTS].includes(authCtx.user?.role as string)
+      );
+
+      setAuthorizedAccess(access);
+    }
+  }, [authCtx.user]);
 
   return (
-    <EventContext.Provider value={{ events, isLoading, create, update, toggle, destroy }}>
+    <EventContext.Provider
+      value={{ events, isLoading, authorizedAccess, create, update, toggle, destroy }}>
       {children}
     </EventContext.Provider>
   );
