@@ -1,4 +1,5 @@
 import { Heading, List, ListIcon, ListItem } from '@chakra-ui/react';
+import { NextSeo } from 'next-seo';
 
 import Layout from 'components/layout';
 
@@ -8,6 +9,8 @@ import { FaInfoCircle } from 'react-icons/fa';
 const Dashboard = () => {
   return (
     <Layout>
+      <NextSeo title="Dashboard" canonical={`${process.env.NEXT_PUBLIC_WEB_URL}/dashboard`} />
+
       <Heading as="h1" fontSize="3xl">
         Dashboard
       </Heading>
