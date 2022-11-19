@@ -33,8 +33,6 @@ export interface IEventHistory {
   tagline: string;
   keypoint: string[];
   venueName: string;
-  status: 'Published' | 'Draft';
-  tickets: IEventTicket[];
   image: string;
   category: string;
   talent: string;

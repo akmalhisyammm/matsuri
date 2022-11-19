@@ -7,6 +7,12 @@ export interface IPayment {
   image: IImage;
 }
 
+export interface IPaymentHistory {
+  type: string;
+  image: string;
+  organizer: string;
+}
+
 export interface IPaymentPayload {
   type: string;
   imageId: string;
