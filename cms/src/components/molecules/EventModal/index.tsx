@@ -161,7 +161,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
     if (data) {
       setForm({
         title: data.title,
-        date: moment(data.date.split('.')[0]).format('YYYY-MM-DDTHH:mm'),
+        date: moment(data.date).format('YYYY-MM-DDTHH:mm'),
         about: data.about,
         tagline: data.tagline,
         keypoint: data.keypoint,

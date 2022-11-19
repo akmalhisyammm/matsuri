@@ -142,7 +142,7 @@ const CategoriesTable = () => {
                     )}
                     {categoriesCtx.authorizedAccess.includes('DELETE') && (
                       <Tooltip
-                        label="Unable to delete category with related events"
+                        label="Unable to delete category related to an event"
                         placement="bottom-start"
                         isDisabled={
                           eventsCtx.events.filter((event) => event.category._id === category._id)

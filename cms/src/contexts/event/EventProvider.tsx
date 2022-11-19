@@ -105,12 +105,12 @@ const EventProvider = ({ children }: EventProviderProps) => {
   };
 
   const toggle = async (id: string) => {
-    setIsLoading(true);
-
     const currentStatus = events.find((event) => event._id === id)?.status;
     const payload = { status: currentStatus === 'Published' ? 'Draft' : 'Published' };
 
     try {
+      setIsLoading(true);
+
       const { data } = await putFetcher(`/events/${id}/status`, payload, token);
 
       const updatedEvents = events.map((event) => {
