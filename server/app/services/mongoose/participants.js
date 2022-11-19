@@ -171,6 +171,12 @@ const checkoutOrder = async (req) => {
     organizer: event.organizer,
   };
 
+  const paymentHistory = {
+    type: payment.type,
+    image: payment.image,
+    organizer: payment.organizer,
+  };
+
   const result = new Orders({
     date: new Date(),
     totalPay,
@@ -181,6 +187,7 @@ const checkoutOrder = async (req) => {
     payment,
     event,
     eventHistory,
+    paymentHistory,
   });
 
   await result.save();

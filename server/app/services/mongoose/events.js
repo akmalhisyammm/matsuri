@@ -161,19 +161,6 @@ const updateEvent = async (req) => {
   return result;
 };
 
-const deleteEvent = async (req) => {
-  const { id } = req.params;
-  const { organizer } = req.user;
-
-  const result = await Events.findOneAndRemove({ _id: id, organizer });
-
-  if (!result) {
-    throw new NotFoundError(`No events found with id ${id}.`);
-  }
-
-  return result;
-};
-
 const updateEventStatus = async (req) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -192,6 +179,19 @@ const updateEventStatus = async (req) => {
   result.status = status;
 
   await result.save();
+
+  return result;
+};
+
+const deleteEvent = async (req) => {
+  const { id } = req.params;
+  const { organizer } = req.user;
+
+  const result = await Events.findOneAndRemove({ _id: id, organizer });
+
+  if (!result) {
+    throw new NotFoundError(`No events found with id ${id}.`);
+  }
 
   return result;
 };

@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Paid'],
+      enum: ['Pending', 'Paid', 'Cancelled'],
       default: 'Pending',
     },
     totalPay: {
@@ -112,6 +112,22 @@ const orderSchema = new mongoose.Schema(
       talent: {
         type: mongoose.Types.ObjectId,
         ref: 'Talent',
+        required: true,
+      },
+      organizer: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Organizer',
+        required: true,
+      },
+    },
+    paymentHistory: {
+      type: {
+        type: String,
+        required: [true, 'Payment type is required.'],
+      },
+      image: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Image',
         required: true,
       },
       organizer: {

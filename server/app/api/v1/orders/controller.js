@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { getAllOrders } = require('../../../services/mongoose/orders');
+const { getAllOrders, updateOrderStatus } = require('../../../services/mongoose/orders');
 
 const index = async (req, res, next) => {
   try {
@@ -13,4 +13,14 @@ const index = async (req, res, next) => {
   }
 };
 
-module.exports = { index };
+const updateStatus = async (req, res, next) => {
+  try {
+    const result = await updateOrderStatus(req);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { index, updateStatus };

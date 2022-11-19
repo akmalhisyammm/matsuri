@@ -1,4 +1,5 @@
 const Orders = require('../../api/v1/orders/model');
+const { NotFoundError, BadRequestError } = require('../../errors');
 
 const getAllOrders = async (req) => {
   const { limit = 10, page = 1, startDate, endDate } = req.query;
@@ -7,7 +8,11 @@ const getAllOrders = async (req) => {
   let conditions = {};
 
   if (role !== 'Owner') {
-    conditions = { ...conditions, 'eventHistory.organizer': organizer };
+    conditions = {
+      ...conditions,
+      'eventHistory.organizer': organizer,
+      'paymentHistory.organizer': organizer,
+    };
   }
 
   if (startDate && endDate) {
@@ -29,4 +34,25 @@ const getAllOrders = async (req) => {
   return { data: result, pages: Math.ceil(count / limit), total: count };
 };
 
-module.exports = { getAllOrders };
+const updateOrderStatus = async (req) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!['Pending', 'Paid', 'Cancelled'].includes(status)) {
+    throw new BadRequestError('Status must be Pending, Paid, or Cancelled.');
+  }
+
+  const result = await Orders.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError(`No orders found with id ${id}.`);
+  }
+
+  result.status = status;
+
+  await result.save();
+
+  return result;
+};
+
+module.exports = { getAllOrders, updateOrderStatus };
