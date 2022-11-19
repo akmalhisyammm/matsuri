@@ -102,8 +102,8 @@ const EventsTable = () => {
                   />
                 </Td>
                 <Td>{event.title}</Td>
-                <Td>{moment(event.date.split('.')[0]).format('h:mm A')}</Td>
-                <Td>{moment(event.date.split('.')[0]).format('LL')}</Td>
+                <Td>{moment(event.date).format('HH:mm')}</Td>
+                <Td>{moment(event.date).format('LL')}</Td>
                 <Td>{event.venueName}</Td>
                 <Td>
                   <HStack>

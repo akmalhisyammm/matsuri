@@ -153,7 +153,6 @@ const UserModal = ({ data, isOpen, onClose }: UserModalProps) => {
                 <InputRightElement>
                   <IconButton
                     variant="ghost"
-                    colorScheme="blue"
                     size="sm"
                     aria-label={isShowPassword ? 'Hide' : 'Show'}
                     icon={isShowPassword ? <FaEyeSlash /> : <FaEye />}

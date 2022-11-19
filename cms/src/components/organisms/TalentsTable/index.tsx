@@ -182,7 +182,7 @@ const TalentsTable = () => {
                     )}
                     {talentsCtx.authorizedAccess.includes('DELETE') && (
                       <Tooltip
-                        label="Unable to delete talent with related events"
+                        label="Unable to delete talent related to an event"
                         placement="bottom-start"
                         isDisabled={
                           eventsCtx.events.filter((event) => event.talent._id === talent._id)
