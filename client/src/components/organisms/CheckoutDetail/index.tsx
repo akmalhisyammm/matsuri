@@ -3,7 +3,6 @@ import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
 
 import { useEventDetail } from 'hooks/events';
-import { formatDate } from 'utils/formatDate';
 
 import type { IEventDetailSWR } from 'types/event';
 
@@ -43,11 +42,11 @@ const CheckoutDetail = ({ eventId, ticketId }: CheckoutDetailProps) => {
                 </div>
                 <div className="d-flex align-items-center gap-3">
                   <Image src="/icons/ic-time-white.svg" alt="" width={32} height={32} />
-                  <span>{moment(data?.date).format('HH:MM A')}</span>
+                  <span>{moment(data?.date).format('hh:mm A')}</span>
                 </div>
                 <div className="d-flex align-items-center gap-3">
                   <Image src="/icons/ic-calendar-white.svg" alt="" width={32} height={32} />
-                  <span>{formatDate(data?.date)}</span>
+                  <span>{moment(data?.date).format('LL')}</span>
                 </div>
               </>
             ) : (

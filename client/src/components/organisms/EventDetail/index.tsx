@@ -105,8 +105,8 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 tickets={data?.tickets}
                 imageUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data?.talent.image.url}`}
                 location={data?.venueName}
-                time={moment(data?.date.split('.')[0]).format('hh:mm A')}
-                date={moment(data?.date.split('.')[0]).format('LL')}
+                time={moment(data?.date).format('hh:mm A')}
+                date={moment(data?.date).format('LL')}
                 onSubmit={handleTicketSubmit}
               />
             ) : (
