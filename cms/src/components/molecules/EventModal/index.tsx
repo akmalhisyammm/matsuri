@@ -267,7 +267,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                   colorScheme="red"
                   aria-label="Remove"
                   icon={<FaMinus />}
-                  disabled={form.keypoint.length === 1}
+                  isDisabled={form.keypoint.length === 1}
                   onClick={handleRemoveClick.bind(null, 'keypoint', idx)}
                 />
               </HStack>
@@ -336,7 +336,7 @@ const EventModal = ({ data, isOpen, onClose }: EventModalProps) => {
                     height="full"
                     aria-label="Remove"
                     icon={<FaMinus />}
-                    disabled={form.tickets.length === 1}
+                    isDisabled={form.tickets.length === 1}
                     onClick={handleRemoveClick.bind(null, 'tickets', idx)}
                   />
                 </Box>

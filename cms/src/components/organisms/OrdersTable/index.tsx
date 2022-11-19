@@ -15,9 +15,9 @@ import {
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import moment from 'moment';
 
 import { OrderContext } from 'contexts/order';
-import moment from 'moment';
 
 const OrdersTable = () => {
   const ordersCtx = useContext(OrderContext);
