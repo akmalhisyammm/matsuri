@@ -4,6 +4,7 @@ import { AuthProvider } from 'contexts/auth';
 import { CategoryProvider } from 'contexts/category';
 import { EventProvider } from 'contexts/event';
 import { ImageProvider } from 'contexts/image';
+import { OrderProvider } from 'contexts/order';
 import { PaymentProvider } from 'contexts/payment';
 import { TalentProvider } from 'contexts/talent';
 import { UserProvider } from 'contexts/user';
@@ -21,7 +22,9 @@ const App = ({ Component, pageProps }: AppProps) => {
               <PaymentProvider>
                 <TalentProvider>
                   <EventProvider>
-                    <Component {...pageProps} />
+                    <OrderProvider>
+                      <Component {...pageProps} />
+                    </OrderProvider>
                   </EventProvider>
                 </TalentProvider>
               </PaymentProvider>
