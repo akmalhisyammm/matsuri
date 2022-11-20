@@ -1,8 +1,10 @@
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+
+import { CLIENT_API_URL } from 'constants/api';
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: CLIENT_API_URL,
 });
 
 instance.interceptors.response.use(
@@ -14,7 +16,7 @@ instance.interceptors.response.use(
       toast.error(message);
     }
 
-    return Promise.reject(err.response);
+    return Promise.reject(Error(message));
   }
 );
 
