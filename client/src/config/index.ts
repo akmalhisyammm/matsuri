@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { CLIENT_API_URL } from 'constants/api';
@@ -9,15 +8,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
   (res) => res.data,
-  (err) => {
-    const message = err.response.data.msg;
-
-    if (typeof message === 'string') {
-      toast.error(message);
-    }
-
-    return Promise.reject(Error(message));
-  }
+  (err) => Promise.reject(Error(err.response.data.msg))
 );
 
 export default instance;

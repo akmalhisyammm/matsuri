@@ -36,36 +36,47 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     payload: ISignInPayload,
     query: Record<'eventId' | 'ticketId' | 'organizerId', string | undefined>
   ) => {
-    const { data } = await postFetcher('/auth/sign-in', payload);
+    try {
+      const { data } = await postFetcher('/auth/sign-in', payload);
 
-    setToken(data.token);
-    setIsAuthenticated(true);
+      setToken(data.token);
+      setIsAuthenticated(true);
 
-    toast.success('Sign in successful.');
+      toast.success('Sign in successful.');
 
-    if (query.eventId && query.ticketId && query.organizerId) {
-      router.push({
-        pathname: `/checkout/${query.eventId}`,
-        query: { ticketId: query.ticketId, organizerId: query.organizerId },
-      });
-    } else {
-      router.push('/');
+      if (query.eventId && query.ticketId && query.organizerId) {
+        router.push({
+          pathname: `/checkout/${query.eventId}`,
+          query: { ticketId: query.ticketId, organizerId: query.organizerId },
+        });
+      } else {
+        router.push('/');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
     }
   };
 
   const signOut = () => {
     removeToken();
-
     setIsAuthenticated(false);
 
     toast.success('Sign out successful.');
   };
 
   const activate = async (payload: IActivatePayload) => {
-    await putFetcher('/auth/activate', payload);
+    try {
+      await putFetcher('/auth/activate', payload);
 
-    toast.success('Your account has been activated.');
-    router.push('/sign-in');
+      toast.success('Your account has been activated.');
+      router.push('/sign-in');
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
   };
 
   useEffect(() => {
