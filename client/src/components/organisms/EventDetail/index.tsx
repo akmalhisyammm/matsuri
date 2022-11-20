@@ -19,7 +19,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
 
   const { data, isLoading, isError }: IEventDetailSWR = useEventDetail(eventId);
 
-  const handleSubmit = (ticketId: string) => {
+  const handleBuyClick = (ticketId: string) => {
     const token = getToken();
 
     if (!token) {
@@ -27,12 +27,12 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
         pathname: '/sign-in',
         query: { eventId, ticketId, organizerId: data?.organizer },
       });
+    } else {
+      router.push({
+        pathname: `/checkout/${eventId}`,
+        query: { ticketId, organizerId: data?.organizer },
+      });
     }
-
-    router.push({
-      pathname: `/checkout/${eventId}`,
-      query: { eventId, ticketId, organizerId: data?.organizer },
-    });
   };
 
   return (
@@ -106,7 +106,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 location={data?.venueName}
                 time={moment(data?.date).format('hh:mm A')}
                 date={moment(data?.date).format('LL')}
-                onSubmit={handleSubmit}
+                action={handleBuyClick}
               />
             ) : (
               <div className="w-100" style={{ maxWidth: 350 }}>

@@ -1,9 +1,9 @@
 import Skeleton from 'react-loading-skeleton';
 
+import { CustomImage } from 'components/atoms';
 import { useEventDetail } from 'hooks/events';
 
 import type { IEventDetailSWR } from 'types/event';
-import { CustomImage } from 'components/atoms';
 
 type BannerDetailProps = {
   eventId: string;

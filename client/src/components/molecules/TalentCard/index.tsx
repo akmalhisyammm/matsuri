@@ -10,7 +10,7 @@ type TalentCardProps = {
   location: string;
   time: string;
   date: string;
-  onSubmit: (ticketId: string) => void;
+  action: (ticketId: string) => void;
 };
 
 const TalentCard = ({
@@ -21,7 +21,7 @@ const TalentCard = ({
   location,
   time,
   date,
-  onSubmit,
+  action,
 }: TalentCardProps) => {
   return (
     <div className="d-flex flex-column card-event">
@@ -64,7 +64,7 @@ const TalentCard = ({
               </div>
               <div style={{ width: 300 }}>
                 {ticket.stock ? (
-                  <CustomButton variant="btn-green w-100" action={onSubmit.bind(null, ticket._id)}>
+                  <CustomButton variant="btn-green w-100" action={action.bind(null, ticket._id)}>
                     Buy Now
                   </CustomButton>
                 ) : (

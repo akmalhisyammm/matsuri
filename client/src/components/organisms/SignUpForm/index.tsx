@@ -4,8 +4,10 @@ import { CustomButton } from 'components/atoms';
 import { InputGroup } from 'components/molecules';
 import { AuthContext } from 'contexts/auth';
 
+import type { ISignUpPayload } from 'types/user';
+
 const SignUpForm = () => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ISignUpPayload>({
     firstName: '',
     lastName: '',
     email: '',
@@ -24,7 +26,7 @@ const SignUpForm = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    authCtx.signUp(form.firstName, form.lastName, form.email, form.password, form.role);
+    authCtx.signUp(form);
   };
 
   return (

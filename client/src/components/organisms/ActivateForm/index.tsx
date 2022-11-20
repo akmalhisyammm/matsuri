@@ -4,12 +4,14 @@ import { CustomButton } from 'components/atoms';
 import { InputGroup } from 'components/molecules';
 import { AuthContext } from 'contexts/auth';
 
+import type { IActivatePayload } from 'types/user';
+
 type ActivateFormProps = {
   email: string;
 };
 
 const ActivateForm = ({ email }: ActivateFormProps) => {
-  const [form, setForm] = useState({ otp: '' });
+  const [form, setForm] = useState<IActivatePayload>({ email, otp: '' });
 
   const authCtx = useContext(AuthContext);
 
@@ -22,7 +24,7 @@ const ActivateForm = ({ email }: ActivateFormProps) => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    authCtx.activate(form.otp, email);
+    authCtx.activate(form);
   };
 
   return (

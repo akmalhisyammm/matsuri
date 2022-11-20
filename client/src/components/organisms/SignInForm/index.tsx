@@ -5,8 +5,14 @@ import { CustomButton } from 'components/atoms';
 import { InputGroup } from 'components/molecules';
 import { AuthContext } from 'contexts/auth';
 
-const SignInForm = () => {
-  const [form, setForm] = useState({
+import type { ISignInPayload } from 'types/user';
+
+type SignInFormProps = {
+  checkoutQuery: Record<'eventId' | 'ticketId' | 'organizerId', string | undefined>;
+};
+
+const SignInForm = ({ checkoutQuery }: SignInFormProps) => {
+  const [form, setForm] = useState<ISignInPayload>({
     email: '',
     password: '',
   });
@@ -23,7 +29,7 @@ const SignInForm = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    authCtx.signIn(form.email, form.password);
+    authCtx.signIn(form, checkoutQuery);
   };
 
   return (
