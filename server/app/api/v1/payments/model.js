@@ -4,9 +4,9 @@ const paymentSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      required: [true, 'Payment type is required.'],
       minLength: 3,
       maxLength: 50,
+      required: [true, 'Payment type is required.'],
     },
     status: {
       type: Boolean,

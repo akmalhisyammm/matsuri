@@ -9,14 +9,14 @@ const createImage = async (req) => {
   return result;
 };
 
-const getImageById = async (id) => {
+const checkImage = async (id) => {
   const result = await Images.findOne({ _id: id });
 
   if (!result) {
-    throw new NotFoundError(`No images found with id ${id}.`);
+    throw new NotFoundError('Image not found.');
   }
 
   return result;
 };
 
-module.exports = { createImage, getImageById };
+module.exports = { createImage, checkImage };

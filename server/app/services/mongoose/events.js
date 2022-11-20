@@ -1,7 +1,7 @@
 const Events = require('../../api/v1/events/model');
-const { getCategoryById } = require('./categories');
-const { getImageById } = require('./images');
-const { getTalentById } = require('./talents');
+const { checkCategory } = require('./categories');
+const { checkImage } = require('./images');
+const { checkTalent } = require('./talents');
 const { NotFoundError, BadRequestError } = require('../../errors');
 
 const getAllEvents = async (req) => {
@@ -52,7 +52,7 @@ const getEventByIdAndOrganizer = async (req) => {
     });
 
   if (!result) {
-    throw new NotFoundError(`No events found with id ${id}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   return result;
@@ -74,9 +74,9 @@ const createEvent = async (req) => {
   } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
-  await getCategoryById(categoryId);
-  await getTalentById(talentId);
+  await checkImage(imageId);
+  await checkCategory(categoryId);
+  await checkTalent(talentId);
 
   const check = await Events.findOne({ title });
 
@@ -119,14 +119,14 @@ const updateEvent = async (req) => {
   } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
-  await getCategoryById(categoryId);
-  await getTalentById(talentId);
+  await checkImage(imageId);
+  await checkCategory(categoryId);
+  await checkTalent(talentId);
 
   const checkCurrent = await Events.findOne({ _id: id });
 
   if (!checkCurrent) {
-    throw new NotFoundError(`No events found with id ${id}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   const checkOther = await Events.findOne({
@@ -173,7 +173,7 @@ const updateEventStatus = async (req) => {
   const result = await Events.findOne({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No events found with id ${id}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   result.status = status;
@@ -190,7 +190,7 @@ const deleteEvent = async (req) => {
   const result = await Events.findOneAndRemove({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No events found with id ${id}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   return result;

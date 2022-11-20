@@ -22,7 +22,7 @@ const errorMiddleware = (err, req, res, next) => {
   }
 
   if (err.name === 'CastError') {
-    customError.msg = `No items found with id ${err.value}.`;
+    customError.msg = 'Invalid ID.';
     customError.statusCode = StatusCodes.NOT_FOUND;
   }
 

@@ -45,7 +45,7 @@ const updateOrderStatus = async (req) => {
   const result = await Orders.findOne({ _id: id });
 
   if (!result) {
-    throw new NotFoundError(`No orders found with id ${id}.`);
+    throw new NotFoundError('Order not found.');
   }
 
   result.status = status;

@@ -1,5 +1,5 @@
 const Talents = require('../../api/v1/talents/model');
-const { getImageById } = require('./images');
+const { checkImage } = require('./images');
 const { NotFoundError, BadRequestError } = require('../../errors');
 
 const getAllTalents = async (req) => {
@@ -19,15 +19,7 @@ const getAllTalents = async (req) => {
   return result;
 };
 
-const getTalentById = async (id) => {
-  const result = await Talents.findOne({ _id: id });
 
-  if (!result) {
-    throw new NotFoundError(`No talents found with id ${id}.`);
-  }
-
-  return result;
-};
 
 const getTalentByIdAndOrganizer = async (req) => {
   const { id } = req.params;
@@ -38,7 +30,7 @@ const getTalentByIdAndOrganizer = async (req) => {
     .select('_id name role image');
 
   if (!result) {
-    throw new NotFoundError(`No talents found with id ${id}.`);
+    throw new NotFoundError('Talent not found.');
   }
 
   return result;
@@ -48,7 +40,7 @@ const createTalent = async (req) => {
   const { name, role, imageId } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
+  await checkImage(imageId);
 
   const check = await Talents.findOne({ name, organizer });
 
@@ -71,7 +63,7 @@ const updateTalent = async (req) => {
   const { name, role, imageId } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
+  await checkImage(imageId);
 
   const check = await Talents.findOne({ _id: { $ne: id }, name, organizer });
 
@@ -86,7 +78,7 @@ const updateTalent = async (req) => {
   );
 
   if (!result) {
-    throw new NotFoundError(`No talents found with id ${id}.`);
+    throw new NotFoundError('Talent not found.');
   }
 
   return result;
@@ -99,7 +91,17 @@ const deleteTalent = async (req) => {
   const result = await Talents.findOneAndRemove({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No talents found with id ${id}.`);
+    throw new NotFoundError('Talent not found.');
+  }
+
+  return result;
+};
+
+const checkTalent = async (id) => {
+  const result = await Talents.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError('Talent not found.');
   }
 
   return result;
@@ -107,9 +109,9 @@ const deleteTalent = async (req) => {
 
 module.exports = {
   getAllTalents,
-  getTalentById,
   getTalentByIdAndOrganizer,
   createTalent,
   updateTalent,
   deleteTalent,
+  checkTalent,
 };

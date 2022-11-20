@@ -9,15 +9,7 @@ const getAllCategories = async (req) => {
   return result;
 };
 
-const getCategoryById = async (id) => {
-  const result = await Categories.findOne({ _id: id });
 
-  if (!result) {
-    throw new NotFoundError(`No categories found with id ${id}.`);
-  }
-
-  return result;
-};
 
 const getCategoryByIdAndOrganizer = async (req) => {
   const { id } = req.params;
@@ -26,7 +18,7 @@ const getCategoryByIdAndOrganizer = async (req) => {
   const result = await Categories.findOne({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No categories found with id ${id}.`);
+    throw new NotFoundError('Category not found.');
   }
 
   return result;
@@ -65,7 +57,7 @@ const updateCategory = async (req) => {
   );
 
   if (!result) {
-    throw new NotFoundError(`No categories found with id ${id}.`);
+    throw new NotFoundError('Category not found.');
   }
 
   return result;
@@ -78,7 +70,17 @@ const deleteCategory = async (req) => {
   const result = await Categories.findOneAndRemove({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No categories found with id ${id}.`);
+    throw new NotFoundError('Category not found.');
+  }
+
+  return result;
+};
+
+const checkCategory = async (id) => {
+  const result = await Categories.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError('Category not found.');
   }
 
   return result;
@@ -86,9 +88,9 @@ const deleteCategory = async (req) => {
 
 module.exports = {
   getAllCategories,
-  getCategoryById,
   getCategoryByIdAndOrganizer,
   createCategory,
   updateCategory,
   deleteCategory,
+  checkCategory,
 };

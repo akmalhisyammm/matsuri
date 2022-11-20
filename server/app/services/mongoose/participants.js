@@ -2,8 +2,8 @@ const Participant = require('../../api/v1/participants/model');
 const Events = require('../../api/v1/events/model');
 const Orders = require('../../api/v1/orders/model');
 const Payments = require('../../api/v1/payments/model');
-const { otpMail } = require('../mail');
 const { BadRequestError, NotFoundError, UnauthorizedError } = require('../../errors');
+const { otpMail } = require('../mail');
 const { createParticipantPayload, generateToken } = require('../../utils');
 
 const handleSignUp = async (req) => {
@@ -109,7 +109,7 @@ const getEventById = async (req) => {
     .populate('image');
 
   if (!result) {
-    throw new NotFoundError(`No events found with id ${id}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   return result;
@@ -130,13 +130,13 @@ const checkoutOrder = async (req) => {
   const event = await Events.findOne({ _id: eventId });
 
   if (!event) {
-    throw new NotFoundError(`No events found with id ${eventId}.`);
+    throw new NotFoundError('Event not found.');
   }
 
   const payment = await Payments.findOne({ _id: paymentId });
 
   if (!payment) {
-    throw new NotFoundError(`No payment method found with id ${paymentId}.`);
+    throw new NotFoundError('Payment not found.');
   }
 
   let totalPay = 0;

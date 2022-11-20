@@ -1,5 +1,5 @@
 const Payments = require('../../api/v1/payments/model');
-const { getImageById } = require('./images');
+const { checkImage } = require('./images');
 const { NotFoundError, BadRequestError } = require('../../errors');
 
 const getAllPayments = async (req) => {
@@ -12,15 +12,7 @@ const getAllPayments = async (req) => {
   return result;
 };
 
-const getPaymentById = async (id) => {
-  const result = await Payments.findOne({ _id: id });
 
-  if (!result) {
-    throw new NotFoundError(`No payments found with id ${id}`);
-  }
-
-  return result;
-};
 
 const getPaymentByIdAndOrganizer = async (req) => {
   const { id } = req.params;
@@ -31,7 +23,7 @@ const getPaymentByIdAndOrganizer = async (req) => {
     .select('_id type status image');
 
   if (!result) {
-    throw new NotFoundError(`No payments found with id ${id}`);
+    throw new NotFoundError('Payment not found.');
   }
 
   return result;
@@ -41,7 +33,7 @@ const createPayment = async (req) => {
   const { type, imageId } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
+  await checkImage(imageId);
 
   const check = await Payments.findOne({ type, organizer });
 
@@ -59,7 +51,7 @@ const updatePayment = async (req) => {
   const { type, imageId } = req.body;
   const { organizer } = req.user;
 
-  await getImageById(imageId);
+  await checkImage(imageId);
 
   const check = await Payments.findOne({ _id: { $ne: id }, type, organizer });
 
@@ -74,7 +66,7 @@ const updatePayment = async (req) => {
   );
 
   if (!result) {
-    throw new NotFoundError(`No payments found with id ${id}`);
+    throw new NotFoundError('Payment not found.');
   }
 
   return result;
@@ -87,7 +79,17 @@ const deletePayment = async (req) => {
   const result = await Payments.findOneAndRemove({ _id: id, organizer });
 
   if (!result) {
-    throw new NotFoundError(`No payments found with id ${id}`);
+    throw new NotFoundError('Payment not found.');
+  }
+
+  return result;
+};
+
+const checkPayment = async (id) => {
+  const result = await Payments.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError('Payment not found.');
   }
 
   return result;
@@ -95,9 +97,9 @@ const deletePayment = async (req) => {
 
 module.exports = {
   getAllPayments,
-  getPaymentById,
   getPaymentByIdAndOrganizer,
   createPayment,
   updatePayment,
   deletePayment,
+  checkPayment,
 };
