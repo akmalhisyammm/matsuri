@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import Image from 'next/image';
 
-import { CustomButton, CustomRadio } from 'components/atoms';
+import { CustomButton, CustomImage, CustomRadio } from 'components/atoms';
 import { InputGroup } from 'components/molecules';
 import { useOrganizerPayments } from 'hooks/payments';
 import { useEventDetail } from 'hooks/events';
@@ -69,18 +68,18 @@ const CheckoutForm = ({ eventId, ticketId, organizerId }: CheckoutFormProps) => 
     const token = getToken();
 
     const payload = {
-      tickets: orderedTicket,
       personalDetail: {
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
         role: form.role,
       },
+      tickets: orderedTicket,
       eventId: form.eventId,
       paymentId: form.paymentId,
     };
 
-    await postFetcher('/api/v1/checkout', payload, token || undefined);
+    await postFetcher('/checkout', payload, token || undefined);
 
     toast.success('Checkout successful.');
     router.push('/dashboard');
@@ -164,7 +163,7 @@ const CheckoutForm = ({ eventId, ticketId, organizerId }: CheckoutFormProps) => 
             Pay Now
           </CustomButton>
           <div>
-            <Image src="/icons/ic-secure.svg" alt="Secure Icon" width={20} height={20} />{' '}
+            <CustomImage src="/icons/ic-secure.svg" alt="Secure" width={20} height={20} />{' '}
             <span>Your payment is secure and encrypted</span>
           </div>
         </div>

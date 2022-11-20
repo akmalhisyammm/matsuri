@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import Image from 'next/image';
-
-import { CustomLink } from 'components/atoms';
+import { CustomImage, CustomLink } from 'components/atoms';
 
 type EventCardProps = {
   title: string;
@@ -13,19 +10,16 @@ type EventCardProps = {
 };
 
 const EventCard = ({ title, subtitle, description, price, imageUrl, href }: EventCardProps) => {
-  const [imageSrc, setImageSrc] = useState<string>(imageUrl);
-
   return (
     <div className="card-grow h-100">
       <span className="badge-pricing">{price > 0 ? `$${price}` : 'FREE'}</span>
-      <Image
-        src={imageSrc}
+      <CustomImage
+        src={imageUrl}
         alt={title}
         width={776}
         height={436}
         placeholder="blur"
         blurDataURL="/images/logo.png"
-        onError={() => setImageSrc('/images/logo.png')}
         priority
       />
 

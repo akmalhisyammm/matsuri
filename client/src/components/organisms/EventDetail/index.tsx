@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
-import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
 
-import { CustomButton } from 'components/atoms';
+import { CustomButton, CustomImage } from 'components/atoms';
 import { KeypointItem, TalentCard } from 'components/molecules';
 import { useEventDetail } from 'hooks/events';
 import { getToken } from 'utils/storeToken';
@@ -20,7 +19,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
 
   const { data, isLoading, isError }: IEventDetailSWR = useEventDetail(eventId);
 
-  const handleTicketSubmit = (ticketId: string) => {
+  const handleSubmit = (ticketId: string) => {
     const token = getToken();
 
     if (!token) {
@@ -77,7 +76,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 {!isLoading ? (
                   <div className="map-placeholder">
                     <div className="maps">
-                      <Image src="/images/maps.png" alt="Maps" width={1016} height={606} />
+                      <CustomImage src="/images/maps.png" alt="Maps" width={1016} height={606} />
                       <div
                         className="absolute d-flex justify-content-center align-items-center"
                         onMouseOver={(e) => {
@@ -107,7 +106,7 @@ const EventDetail = ({ eventId }: EventDetailProps) => {
                 location={data?.venueName}
                 time={moment(data?.date).format('hh:mm A')}
                 date={moment(data?.date).format('LL')}
-                onSubmit={handleTicketSubmit}
+                onSubmit={handleSubmit}
               />
             ) : (
               <div className="w-100" style={{ maxWidth: 350 }}>

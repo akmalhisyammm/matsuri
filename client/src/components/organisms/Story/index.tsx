@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 
-import { CustomButton } from 'components/atoms';
+import { CustomButton, CustomImage } from 'components/atoms';
 
 const Story = () => {
   const router = useRouter();
@@ -9,7 +8,7 @@ const Story = () => {
   return (
     <section className="stories">
       <div className="d-flex flex-row justify-content-center align-items-center container">
-        <Image
+        <CustomImage
           src="/images/story.png"
           alt="Story"
           className="d-none d-lg-block"

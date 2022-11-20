@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 
-import { CustomButton, CustomLink } from 'components/atoms';
+import { CustomButton, CustomImage, CustomLink } from 'components/atoms';
 import { BannerList, Hero } from 'components/organisms';
 import { AuthContext } from 'contexts/auth';
 
@@ -20,7 +19,7 @@ const Header = () => {
       <nav className="container navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
           <CustomLink variant="navbar-brand" href="/">
-            <Image
+            <CustomImage
               src="/images/logo.png"
               alt="Matsuri"
               width={100}
@@ -80,7 +79,7 @@ const Header = () => {
                       role="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false">
-                      {/* <Image src="/images/avatar.png" alt="Avatar" width={60} height={60} /> */}
+                      {/* <CustomImage src="/images/avatar.png" alt="Avatar" width={60} height={60} /> */}
                     </a>
 
                     <ul className="dropdown-menu" aria-labelledby="navbarDropdown">

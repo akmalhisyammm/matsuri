@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { CustomImage } from 'components/atoms';
 
 type SponsorListProps = {
   theme: 'light' | 'dark';
@@ -10,11 +10,11 @@ const SponsorList = ({ theme }: SponsorListProps) => {
       <p>Events held by top & biggest global companies</p>
 
       <div className="d-flex flex-row flex-wrap justify-content-center align-items-center">
-        <Image src="/images/apple-111.svg" alt="Apple" width={88} height={30} />
-        <Image src="/images/Adobe.svg" alt="Adobe" width={127} height={30} />
-        <Image src="/images/slack-21.svg" alt="Slack" width={119} height={30} />
-        <Image src="/images/spotify-11.svg" alt="Spotify" width={101} height={30} />
-        <Image src="/images/google-2015.svg" alt="Google" width={93} height={30} />
+        <CustomImage src="/images/apple-111.svg" alt="Apple" width={88} height={30} />
+        <CustomImage src="/images/Adobe.svg" alt="Adobe" width={127} height={30} />
+        <CustomImage src="/images/slack-21.svg" alt="Slack" width={119} height={30} />
+        <CustomImage src="/images/spotify-11.svg" alt="Spotify" width={101} height={30} />
+        <CustomImage src="/images/google-2015.svg" alt="Google" width={93} height={30} />
       </div>
     </section>
   );

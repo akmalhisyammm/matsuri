@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
 
+import { CustomImage } from 'components/atoms';
 import { useEventDetail } from 'hooks/events';
 
 import type { IEventDetailSWR } from 'types/event';
@@ -19,7 +19,7 @@ const CheckoutDetail = ({ eventId, ticketId }: CheckoutDetailProps) => {
       {!isError ? (
         <>
           {!isLoading ? (
-            <Image
+            <CustomImage
               src={`${process.env.NEXT_PUBLIC_API_URL}/${data?.image.url}`}
               className="event-image"
               alt={data?.title}
@@ -37,15 +37,25 @@ const CheckoutDetail = ({ eventId, ticketId }: CheckoutDetailProps) => {
                 <h5>{data?.title}</h5>
 
                 <div className="d-flex align-items-center gap-3">
-                  <Image src="/icons/ic-marker-white.svg" alt="" width={32} height={32} />
+                  <CustomImage
+                    src="/icons/ic-marker-white.svg"
+                    alt="Location"
+                    width={32}
+                    height={32}
+                  />
                   <span>{data?.venueName}</span>
                 </div>
                 <div className="d-flex align-items-center gap-3">
-                  <Image src="/icons/ic-time-white.svg" alt="" width={32} height={32} />
+                  <CustomImage src="/icons/ic-time-white.svg" alt="Time" width={32} height={32} />
                   <span>{moment(data?.date).format('hh:mm A')}</span>
                 </div>
                 <div className="d-flex align-items-center gap-3">
-                  <Image src="/icons/ic-calendar-white.svg" alt="" width={32} height={32} />
+                  <CustomImage
+                    src="/icons/ic-calendar-white.svg"
+                    alt="Date"
+                    width={32}
+                    height={32}
+                  />
                   <span>{moment(data?.date).format('LL')}</span>
                 </div>
               </>

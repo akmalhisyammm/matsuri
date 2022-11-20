@@ -1,13 +1,11 @@
-import Image from 'next/image';
-
-import { CustomLink } from 'components/atoms';
+import { CustomImage, CustomLink } from 'components/atoms';
 
 const Footer = () => {
   return (
     <footer className="footer bg-navy">
       <div className="container">
         <CustomLink href="index.html">
-          <Image
+          <CustomImage
             src="/images/logo.png"
             alt="Matsuri"
             width={200}

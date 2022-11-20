@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import Image from 'next/image';
-
-import { CustomButton } from 'components/atoms';
+import { CustomButton, CustomImage } from 'components/atoms';
 
 import type { IEventTicket } from 'types/event';
 
@@ -26,20 +23,16 @@ const TalentCard = ({
   date,
   onSubmit,
 }: TalentCardProps) => {
-  const [imageSrc, setImageSrc] = useState<string>(imageUrl);
-
   return (
     <div className="d-flex flex-column card-event">
       <h6>Talent</h6>
       <div className="d-flex align-items-center gap-3 mt-3">
-        <Image
-          src={imageSrc}
+        <CustomImage
+          src={imageUrl}
           alt={name}
           width={60}
           height={60}
-          placeholder="blur"
-          blurDataURL="/images/favicon.png"
-          onError={() => setImageSrc('/images/favicon.png')}
+          fallbackSrc="/images/favicon.png"
           style={{ objectFit: 'cover', borderRadius: '50%' }}
         />
         <div>
@@ -48,7 +41,6 @@ const TalentCard = ({
         </div>
       </div>
 
-      {/* <h6>Get Ticket</h6> */}
       {tickets?.map(
         (ticket: IEventTicket) =>
           ticket.status && (
@@ -60,14 +52,15 @@ const TalentCard = ({
                 <span>/person</span>
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-marker.svg" alt="Location" width={32} height={32} />{' '}
+                <CustomImage src="/icons/ic-marker.svg" alt="Location" width={32} height={32} />{' '}
                 {location}
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-time.svg" alt="Time" width={32} height={32} /> {time}
+                <CustomImage src="/icons/ic-time.svg" alt="Time" width={32} height={32} /> {time}
               </div>
               <div className="d-flex gap-3 align-items-center card-details">
-                <Image src="/icons/ic-calendar.svg" alt="Date" width={32} height={32} /> {date}
+                <CustomImage src="/icons/ic-calendar.svg" alt="Date" width={32} height={32} />{' '}
+                {date}
               </div>
               <div style={{ width: 300 }}>
                 {ticket.stock ? (

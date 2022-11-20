@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
 
+import { CustomImage } from 'components/atoms';
 import { useParticipantOrders } from 'hooks/orders';
 
 import type { IOrderSWR } from 'types/order';
@@ -25,15 +25,25 @@ const OrderList = () => {
                   <h5>{order.eventHistory.title}</h5>
 
                   <div className="d-flex align-items-center gap-3">
-                    <Image src="/icons/ic-marker-white.svg" alt="" width={32} height={32} />
+                    <CustomImage
+                      src="/icons/ic-marker-white.svg"
+                      alt="Location"
+                      width={32}
+                      height={32}
+                    />
                     <span>{order.eventHistory.venueName}</span>
                   </div>
                   <div className="d-flex align-items-center gap-3">
-                    <Image src="/icons/ic-time-white.svg" alt="" width={32} height={32} />
+                    <CustomImage src="/icons/ic-time-white.svg" alt="Time" width={32} height={32} />
                     <span>{moment(order.eventHistory.date).format('hh:mm A')}</span>
                   </div>
                   <div className="d-flex align-items-center gap-3">
-                    <Image src="/icons/ic-calendar-white.svg" alt="" width={32} height={32} />
+                    <CustomImage
+                      src="/icons/ic-calendar-white.svg"
+                      alt="Date"
+                      width={32}
+                      height={32}
+                    />
                     <span>{moment(order.eventHistory.date).format('LL')}</span>
                   </div>
                 </div>

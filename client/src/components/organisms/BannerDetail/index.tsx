@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import Skeleton from 'react-loading-skeleton';
 
 import { useEventDetail } from 'hooks/events';
 
 import type { IEventDetailSWR } from 'types/event';
+import { CustomImage } from 'components/atoms';
 
 type BannerDetailProps = {
   eventId: string;
@@ -16,7 +16,7 @@ const BannerDetail = ({ eventId }: BannerDetailProps) => {
     <section className="preview-image bg-navy text-center" style={{ height: 850 }}>
       {!isError ? (
         !isLoading ? (
-          <Image
+          <CustomImage
             src={`${process.env.NEXT_PUBLIC_API_URL}/${data?.image.url}`}
             className="img-content"
             alt={data?.title}
