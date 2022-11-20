@@ -1,18 +1,16 @@
 import { createContext } from 'react';
-import { IUser } from 'types/user';
+
+import type { IActivatePayload, ISignInPayload, ISignUpPayload, IUser } from 'types/user';
 
 interface IAuthContext {
   user: IUser | null;
-  signUp: (
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    role: string
+  signUp: (payload: ISignUpPayload) => void;
+  signIn: (
+    payload: ISignInPayload,
+    query: Record<'eventId' | 'ticketId' | 'organizerId', string | undefined>
   ) => void;
-  signIn: (email: string, password: string) => void;
   signOut: () => void;
-  activate: (otp: string, email: string) => void;
+  activate: (payload: IActivatePayload) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({

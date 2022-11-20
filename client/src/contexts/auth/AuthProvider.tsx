@@ -7,7 +7,13 @@ import { postFetcher, putFetcher } from 'utils/fetcher';
 import { getToken, removeToken, setToken } from 'utils/storeToken';
 import AuthContext from './Auth.context';
 
-import type { IJWTPayload, IUser } from 'types/user';
+import type {
+  IActivatePayload,
+  IJWTPayload,
+  ISignInPayload,
+  ISignUpPayload,
+  IUser,
+} from 'types/user';
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -19,33 +25,32 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const router = useRouter();
 
-  const signUp = async (
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    role: string
-  ) => {
-    await postFetcher('/auth/sign-up', {
-      firstName,
-      lastName,
-      email,
-      password,
-      role,
-    });
+  const signUp = async (payload: ISignUpPayload) => {
+    await postFetcher('/auth/sign-up', payload);
 
     toast.success('OTP has been sent to your email.');
-    router.push({ pathname: '/sign-up/activate', query: { email } });
+    router.push({ pathname: '/sign-up/activate', query: { email: payload.email } });
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { data } = await postFetcher('/auth/sign-in', { email, password });
+  const signIn = async (
+    payload: ISignInPayload,
+    query: Record<'eventId' | 'ticketId' | 'organizerId', string | undefined>
+  ) => {
+    const { data } = await postFetcher('/auth/sign-in', payload);
 
     setToken(data.token);
     setIsAuthenticated(true);
 
     toast.success('Sign in successful.');
-    router.push('/');
+
+    if (query.eventId && query.ticketId && query.organizerId) {
+      router.push({
+        pathname: `/checkout/${query.eventId}`,
+        query: { ticketId: query.ticketId, organizerId: query.organizerId },
+      });
+    } else {
+      router.push('/');
+    }
   };
 
   const signOut = () => {
@@ -56,8 +61,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     toast.success('Sign out successful.');
   };
 
-  const activate = async (otp: string, email: string) => {
-    await putFetcher('/auth/activate', { otp, email });
+  const activate = async (payload: IActivatePayload) => {
+    await putFetcher('/auth/activate', payload);
 
     toast.success('Your account has been activated.');
     router.push('/sign-in');
