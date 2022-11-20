@@ -11,7 +11,7 @@ type CustomImageProps = {
 };
 
 const CustomImage = ({ src, alt, width, height, fallbackSrc, ...rest }: CustomImageProps) => {
-  const [imageSrc, setImageSrc] = useState<string>('');
+  const [imageSrc, setImageSrc] = useState<string>(src);
 
   useEffect(() => {
     setImageSrc(src);
